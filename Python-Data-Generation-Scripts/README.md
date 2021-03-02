@@ -10,8 +10,7 @@ This python script will automatically generate data for the hospital database.
 $ pip install -r requirements.txt
 ```
 
-#Usage 
-Call python following with the simple algebra problem
+## Usage 
 ```bash
 $ python generator.py
 ```
