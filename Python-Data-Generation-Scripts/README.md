@@ -19,8 +19,8 @@ Add `connection.json` to the same directory as `generator.py`
     "database": "hospital"
 }
 ```
-
 ## Usage 
+Run `generator.py`
 ```bash
 $ python generator.py
 ```
