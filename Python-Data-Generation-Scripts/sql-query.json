@@ -1,44 +1,36 @@
 {
-    "connection": {
-        "host": "localhost",
-        "user": "root",
-        "password": "yourpassword",
-        "database": "hospital"
-    },
-    "query": {
-        "create-table": {
-            "admission": [
-                "DROP TABLE IF EXISTS `hospital`.`admission`;",
-                "CREATE TABLE IF NOT EXISTS `admission` (",
-                "    `id` int(11) NOT NULL AUTO_INCREMENT,",
-                "    `patient_id` varchar(50) NOT NULL,",
-                "    `room_id` int(11) NOT NULL,",
-                "    `report` longtext NOT NULL,",
-                "    `admitted_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
-                "    `discharge_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
-                "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
-                "    PRIMARY KEY (`id`),",
-                "    KEY `patient_id` (`patient_id`),",
-                "    KEY `room_id` (`room_id`)",
-                ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
-            ],
-            "appointment": [
-                "DROP TABLE IF EXISTS `hospital`.`appointment`;",
-                "    CREATE TABLE IF NOT EXISTS `appointment` (",
-                "    `id` int(11) NOT NULL AUTO_INCREMENT,",
-                "    `receptionist_id` varchar(50) NOT NULL,",
-                "    `doctor_id` varchar(50) NOT NULL,",
-                "    `patient_id` varchar(50) NOT NULL,",
-                "    `report` longtext NOT NULL,",
-                "    `app_date` datetime NOT NULL,",
-                "    `next_app_date` datetime DEFAULT NULL,",
-                "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
-                "    PRIMARY KEY (`id`),",
-                "    KEY `receptionist_id` (`receptionist_id`),",
-                "    KEY `doctor_id` (`doctor_id`),",
-                "    KEY `patient_id` (`patient_id`)",
-                ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
-            ]
-        }
+    "create-table": {
+        "admission": [
+            "DROP TABLE IF EXISTS `hospital`.`admission`;",
+            "CREATE TABLE IF NOT EXISTS `admission` (",
+            "    `id` int(11) NOT NULL AUTO_INCREMENT,",
+            "    `patient_id` varchar(50) NOT NULL,",
+            "    `room_id` int(11) NOT NULL,",
+            "    `report` longtext NOT NULL,",
+            "    `admitted_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    `discharge_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    PRIMARY KEY (`id`),",
+            "    KEY `patient_id` (`patient_id`),",
+            "    KEY `room_id` (`room_id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ],
+        "appointment": [
+            "DROP TABLE IF EXISTS `hospital`.`appointment`;",
+            "    CREATE TABLE IF NOT EXISTS `appointment` (",
+            "    `id` int(11) NOT NULL AUTO_INCREMENT,",
+            "    `receptionist_id` varchar(50) NOT NULL,",
+            "    `doctor_id` varchar(50) NOT NULL,",
+            "    `patient_id` varchar(50) NOT NULL,",
+            "    `report` longtext NOT NULL,",
+            "    `app_date` datetime NOT NULL,",
+            "    `next_app_date` datetime DEFAULT NULL,",
+            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    PRIMARY KEY (`id`),",
+            "    KEY `receptionist_id` (`receptionist_id`),",
+            "    KEY `doctor_id` (`doctor_id`),",
+            "    KEY `patient_id` (`patient_id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ]
     }
 }
