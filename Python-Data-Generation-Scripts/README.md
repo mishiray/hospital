@@ -6,8 +6,18 @@ This python script will automatically generate data for the hospital database.
 - Python 3.xx or Python 2.xx
 - sqlalchemy
 
+Install requirements
 ```bash
 $ pip install -r requirements.txt
+```
+Add `connection.json` to the same directory as `generator.py`
+```json
+{
+    "host": "localhost",
+    "user": "root",
+    "password": "p@$$W0rD",
+    "database": "hospital"
+}
 ```
 
 ## Usage 
