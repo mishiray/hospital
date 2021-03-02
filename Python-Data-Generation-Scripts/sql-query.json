@@ -1,14 +1,14 @@
 {
     "connection": {
         "host": "localhost",
-        "user": "yourusername",
+        "user": "root",
         "password": "yourpassword",
-        "database": "mydatabase"
+        "database": "hospital"
     },
     "query": {
         "create-table": {
             "admission": [
-                "DROP TABLE IF EXISTS `admission`;",
+                "DROP TABLE IF EXISTS `hospital`.`admission`;",
                 "CREATE TABLE IF NOT EXISTS `admission` (",
                 "    `id` int(11) NOT NULL AUTO_INCREMENT,",
                 "    `patient_id` varchar(50) NOT NULL,",
@@ -23,7 +23,7 @@
                 ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
             ],
             "appointment": [
-                "DROP TABLE IF EXISTS `appointment`;",
+                "DROP TABLE IF EXISTS `hospital`.`appointment`;",
                 "    CREATE TABLE IF NOT EXISTS `appointment` (",
                 "    `id` int(11) NOT NULL AUTO_INCREMENT,",
                 "    `receptionist_id` varchar(50) NOT NULL,",
