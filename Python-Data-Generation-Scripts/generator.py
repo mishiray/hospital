@@ -1,3 +1,4 @@
+from typing import Tuple
 import mysql.connector
 import json
 import re
@@ -13,8 +14,14 @@ with open('Python-Data-Generation-Scripts/sql-query.json') as json_data:
     SQL_Q = json.load(json_data)
 
 # COMMANDS
-CREATE_TABLE = r"((C|c)reate|CREATE) ((T|t)able|TABLE) \w+ in ((S|s)chema|SCHEMA) \w+"
-CREATE_SCHEMA = r"((C|c)reate|CREATE) ((S|s)chema|SCHEMA) \w+"
+CREATE = r"((C|c)reate|CREATE)"
+TABLE = r"((T|t)able|TABLE)"
+SCHEMA = r"((S|s)chema|SCHEMA)"
+IN = r"in"
+CREATE_TABLE = f"{CREATE} {TABLE} \w+ {IN} {SCHEMA} \w+"
+CREATE_SCHEMA = f"{CREATE} {SCHEMA} \w+"
+YES = r"(y|Y|yes|Yes|YES)"
+NO = r"(n|N|no|No|NO)"
 
 
 def initialize_DB(mycursor):
@@ -27,7 +34,7 @@ def initialize_DB(mycursor):
     schemas = [x[0] for x in mycursor.fetchall()]
 
     if SQL_Q['schema'] not in schemas:
-        mycursor.execute(SQL_Q['create-schema'])
+        mycursor.execute('\n'.join(SQL_Q['create-schema']), multi=True)
         print(LOG.format(f"Created schema '{SQL_Q['schema']}'"))
     else:
         print(LOG.format(f"Schema '{SQL_Q['schema']}' exists."))
@@ -38,10 +45,53 @@ def initialize_DB(mycursor):
 
     for table in SQL_Q['tables']:
         if table not in tables:
-            mycursor.execute(SQL_Q['create-table'][table])
+            mycursor.execute(
+                '\n'.join(SQL_Q['create-table'][table]), multi=True)
             print(LOG.format(f"Created table '{table}'"))
         else:
             print(LOG.format(f"Table '{table}' exists."))
+
+
+def CREATE_SCHEMA_HANDLER(command):
+
+    command = re.search(CREATE_SCHEMA, command).group()
+    keywords = CREATE + '|' + SCHEMA
+    schema = re.sub(keywords, '', command).strip()
+
+    if schema != SQL_Q['schema']:
+
+        print(f"Schema '{schema}' is invalid within this scope")
+        return
+
+    if re.search(YES, input(f"[WARNING] Schema '{schema}' already exist.\nDo you wish to override?\n>> ")):
+
+        mycursor.execute('\n'.join(SQL_Q['create-schema']), multi=True)
+        print(LOG.format(f"Re-created schema '{SQL_Q['schema']}'"))
+
+    else:
+
+        print(f"[LOG] Aborting creation of schema '{schema}'")
+
+
+def CREATE_TABLE_HANDLER(command):
+
+    command = re.search(CREATE_TABLE, command).group()
+    keywords = CREATE + '|' + TABLE + '|' + IN + '|' + SCHEMA
+    table, schema = tuple(re.sub(keywords, '', command).strip().split())
+
+    if table not in SQL_Q['tables'] or schema != SQL_Q['schema']:
+
+        print(f"Table '{table}' is invalid within this scope")
+        return
+
+    if re.search(YES, input(f"[WARNING] Table '{table}' already exist.\nDo you wish to override?\n>> ")):
+
+        mycursor.execute('\n'.join(SQL_Q['create-table'][table]), multi=True)
+        print(LOG.format(f"Re-created Table '{table}' in schema '{schema}'"))
+
+    else:
+
+        print(f"[LOG] Aborting creation of schema '{schema}'")
 
 
 if __name__ == "__main__":
@@ -55,3 +105,13 @@ if __name__ == "__main__":
     while True:
 
         command = input('\n>> ')
+
+        if re.search(CREATE_SCHEMA, command):
+
+            CREATE_SCHEMA_HANDLER(command)
+            continue
+
+        elif re.search(CREATE_TABLE, command):
+
+            CREATE_TABLE_HANDLER(command)
+            continue
