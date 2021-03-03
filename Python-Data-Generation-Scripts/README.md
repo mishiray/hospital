@@ -4,7 +4,9 @@ This python script will automatically generate data for the hospital database.
 ## Requirement
 
 - Python 3.xx or Python 2.xx
-- sqlalchemy
+- MySql - `mysql`
+- Regular expressions - `re`
+- Json - `json`
 
 Install requirements
 ```bash
@@ -23,4 +25,14 @@ Add `connection.json` to the same directory as `generator.py`
 Run `generator.py`
 ```bash
 $ python generator.py
+```
+### Create schema<br>
+**eg**: SCHEMA `hospital`
+```
+>> Create schema hospital
+```
+### Create table
+**eg**: TABLE `patient` in SCHEMA `hospital`
+```
+>> Create table patient in schema hospital
 ```
