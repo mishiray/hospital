@@ -1,5 +1,5 @@
 from typing import Tuple
-import mysql
+import mysql.connector as msql
 import json
 import re
 import os
@@ -101,7 +101,7 @@ def CREATE_TABLE_HANDLER(command):
 if __name__ == "__main__":
 
     # Initialize connection to database
-    mydb = mysql.connector.connect(**CONN)
+    mydb = msql.connect(**CONN)
     mycursor = mydb.cursor()
 
     initialize_DB(mycursor)
