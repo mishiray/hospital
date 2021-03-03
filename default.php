@@ -1,3 +1,11 @@
+<?php
+    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+        header("location: index.php");
+        exit;
+    }
+    $userinfo = $_SESSION["userinfo"];
+    $name = ucwords($userinfo->firstname.' '.$userinfo->lastname);
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"> 
 <head>
@@ -25,20 +33,20 @@
 				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown4"><i class="fa fa-envelope fa-fw"></i> <i class="material-icons right">arrow_drop_down</i></a></li>				
 				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown3"><i class="fa fa-tasks fa-fw"></i> <i class="material-icons right">arrow_drop_down</i></a></li>
 				<li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown2"><i class="fa fa-bell fa-fw"></i> <i class="material-icons right">arrow_drop_down</i></a></li>
-				  <li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b>John Doe</b> <i class="material-icons right">arrow_drop_down</i></a></li>
+				  <li><a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b><?php $name ?></b> <i class="material-icons right">arrow_drop_down</i></a></li>
             </ul>
         </nav>
-		<!-- Dropdown Structure -->
-<ul id="dropdown1" class="dropdown-content">
-<li><a href="#"><i class="fa fa-user fa-fw"></i> My Profile</a>
-</li>
-<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-</li> 
-<li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-</li>
-</ul>
-<ul id="dropdown2" class="dropdown-content w250">
-  <li>
+                                <!-- Dropdown Structure -->
+                        <ul id="dropdown1" class="dropdown-content">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> My Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li> 
+                        <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                        </ul>
+                        <ul id="dropdown2" class="dropdown-content w250">
+                        <li>
                                 <div>
                                     <i class="fa fa-comment fa-fw"></i> New Comment
                                     <span class="pull-right text-muted small">4 min</span>
@@ -84,9 +92,9 @@
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         </li>
-</ul>
-<ul id="dropdown3" class="dropdown-content dropdown-tasks w250">
-<li>
+        </ul>
+        <ul id="dropdown3" class="dropdown-content dropdown-tasks w250">
+        <li>
 		<a href="#">
 			<div>
 				<p>
@@ -195,68 +203,11 @@
                         </li>
 </ul>  
 	   <!--/. NAV TOP  -->
-        <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-
-                    <li>
-                        <a class="active-menu waves-effect waves-dark" href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="ui-elements.html" class="waves-effect waves-dark"><i class="fa fa-desktop"></i> UI Elements</a>
-                    </li>
-					<li>
-                        <a href="chart.html" class="waves-effect waves-dark"><i class="fa fa-bar-chart-o"></i> Charts</a>
-                    </li>
-                    <li>
-                        <a href="tab-panel.html" class="waves-effect waves-dark"><i class="fa fa-qrcode"></i> Tabs & Panels</a>
-                    </li>
-                    
-                    <li>
-                        <a href="table.html" class="waves-effect waves-dark"><i class="fa fa-table"></i> Responsive Tables</a>
-                    </li>
-                    <li>
-                        <a href="form.html" class="waves-effect waves-dark"><i class="fa fa-edit"></i> Forms </a>
-                    </li>
-
-
-                    <li>
-                        <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Second Level Link</a>
-                            </li>
-                            <li>
-                                <a href="#">Second Level Link</a>
-                            </li>
-                            <li>
-                                <a href="#">Second Level Link<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="#">Third Level Link</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Third Level Link</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Third Level Link</a>
-                                    </li>
-
-                                </ul>
-
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="empty.html" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> Empty Page</a>
-                    </li>
-                </ul>
-
-            </div>
-
-        </nav>
+       
+        <?php include 'sidemenu.php'; ?>
         <!-- /. NAV SIDE  -->
-      
+
+        <!--main shi-->
 		<div id="page-wrapper">
 		  <div class="header"> 
                         <h1 class="page-header">
@@ -269,16 +220,15 @@
 					</ol> 
 									
 		</div>
-            <div id="page-inner">
-
-			<div class="dashboard-cards"> 
+        <div id="page-inner">
+            <div class="dashboard-cards"> 
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-3">
 					
 						<div class="card horizontal cardIcon waves-effect waves-dark">
-						<div class="card-image red">
-						<i class="material-icons dp48">import_export</i>
-						</div>
+                            <div class="card-image red">
+                            <i class="material-icons dp48">import_export</i>
+                            </div>
 						<div class="card-stacked red">
 						<div class="card-content">
 						<h3>84,198</h3> 
@@ -469,64 +419,64 @@
 
                     </div>
                     <div class="col-md-8 col-sm-12 col-xs-12">
-	<div class="card">
-	<div class="card-action">
+        <div class="card">
+        <div class="card-action">
 					  <b>User List</b>
 					</div>
 					<div class="card-image">
 					  <ul class="collection">
-    <li class="collection-item avatar">
-      <i class="material-icons circle green">track_changes</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-    <li class="collection-item avatar">
-      <i class="material-icons circle">folder</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-    <li class="collection-item avatar">
-      <i class="material-icons circle green">track_changes</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-    <li class="collection-item avatar">
-      <i class="material-icons circle red">play_arrow</i>
-      <span class="title">Title</span>
-      <p>First Line <br>
-         Second Line
-      </p>
-      <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-    </li>
-  </ul>
-					 </div>  
-					</div>	 
-					
-                       
+        <li class="collection-item avatar">
+        <i class="material-icons circle green">track_changes</i>
+        <span class="title">Title</span>
+        <p>First Line <br>
+            Second Line
+        </p>
+        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+        </li>
+        <li class="collection-item avatar">
+        <i class="material-icons circle">folder</i>
+        <span class="title">Title</span>
+        <p>First Line <br>
+            Second Line
+        </p>
+        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+        </li>
+        <li class="collection-item avatar">
+        <i class="material-icons circle green">track_changes</i>
+        <span class="title">Title</span>
+        <p>First Line <br>
+            Second Line
+        </p>
+        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+        </li>
+        <li class="collection-item avatar">
+        <i class="material-icons circle red">play_arrow</i>
+        <span class="title">Title</span>
+        <p>First Line <br>
+            Second Line
+        </p>
+        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+        </li>
+        </ul>
+                            </div>  
+                            </div>	 
+                            
+                            
 
-                    </div>
-                </div>
-                <!-- /. ROW  -->
-			   <div class="fixed-action-btn horizontal click-to-toggle">
-    <a class="btn-floating btn-large red">
-      <i class="material-icons">menu</i>
-    </a>
-    <ul>
-      <li><a class="btn-floating red"><i class="material-icons">track_changes</i></a></li>
-      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-    </ul>
-  </div>
+                            </div>
+                        </div>
+                        <!-- /. ROW  -->
+                    <div class="fixed-action-btn horizontal click-to-toggle">
+            <a class="btn-floating btn-large red">
+            <i class="material-icons">menu</i>
+            </a>
+            <ul>
+            <li><a class="btn-floating red"><i class="material-icons">track_changes</i></a></li>
+            <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+            <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+            <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+            </ul>
+        </div>
             </div>
             <!-- /. PAGE INNER  -->
         </div>
