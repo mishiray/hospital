@@ -5,8 +5,7 @@ This python script will automatically generate data for the hospital database.
 
 - Python 3.xx or Python 2.xx
 - MySqlMySQL Connector - `mysql-connector-python`
-- Regular expressions - `re`
-- Json - `json`
+- Names - `names`
 
 Install requirements
 ```bash
@@ -35,4 +34,8 @@ $ python generator.py
 **eg**: TABLE `patient` in SCHEMA `hospital`
 ```
 >> Create table patient in schema hospital
+```
+### Add doctors
+```
+>> Add 10 doctors
 ```
