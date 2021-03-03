@@ -3,8 +3,18 @@ import mysql.connector as msql
 import json
 import re
 import os
+import names
+from random import randint
+import datetime
+import base64
 
 LOG = "[LOG] {}"
+SPECIL_FIELDS = [
+    "physiology",
+    "dermatology",
+    "neurology",
+    "optimology"
+]
 
 if 'Python-Data-Generation-Scripts' in os.listdir():
     os.chdir('Python-Data-Generation-Scripts')
@@ -21,9 +31,11 @@ with open('sql-query.json') as json_data:
 CREATE = r"((C|c)reate|CREATE)"
 TABLE = r"((T|t)able|TABLE)"
 SCHEMA = r"((S|s)chema|SCHEMA)"
+ADD = r"((A|a)dd|ADD)"
 IN = r"in"
 CREATE_TABLE = f"{CREATE} {TABLE} \w+ {IN} {SCHEMA} \w+"
 CREATE_SCHEMA = f"{CREATE} {SCHEMA} \w+"
+ADD_DOCTOR = f"{ADD} \d+ docto(r|rs)"
 YES = r"(y|Y|yes|Yes|YES)"
 NO = r"(n|N|no|No|NO)"
 
@@ -133,6 +145,56 @@ def CREATE_TABLE_HANDLER(command):
         print(LOG.format(f"Created Table '{table}' in schema '{schema}'"))
 
 
+def ADD_DOCTOR_HANDLER(command):
+
+    command = re.search(ADD_DOCTOR, command).group()
+    keywords = ADD + '|' + 'doctors'
+    kwstripped = re.sub(keywords, '', command)
+    count = int(re.search(r"\d+", kwstripped).group())
+
+    query = SQL_Q['insert-into']['doctor']
+    mycursor.execute("SELECT * FROM doctor")
+    doctors = mycursor.fetchall()
+    values = []
+
+    for i in range(count):
+
+        doctor_id = 'HTD-' + str(randint(100, 200)) + \
+            '-' + str(randint(100, 120))
+        name = names.get_full_name(gender='male')
+        email = name.replace(' ', '.').lower() + '@doctors.ht.com'
+
+        password = 'password'
+        password_bytes = password.encode('ascii')
+        base64_bytes = base64.b64encode(password_bytes)
+        base64_password = base64_bytes.decode('ascii')
+
+        phone = '+' + str(randint(100, 999)) + '-' + \
+            str(randint(100, 999)) + '-' + str(randint(100, 999)) + \
+            '-' + str(randint(1000, 9999))
+        address = str(randint(10, 99)) + ' ' + \
+            names.get_first_name() + ' Street, Lagos, Nigeria.'
+        specialization = SPECIL_FIELDS[randint(0, len(SPECIL_FIELDS)-1)]
+        dateadded = datetime.datetime.now()
+
+        doctor = (doctor_id, name, email, base64_password, phone,
+                  address, specialization, dateadded)
+
+        if doctor_id not in [x[0] for x in doctors]:
+
+            values.append(doctor)
+            doctors.append(doctor)
+
+        else:
+
+            continue
+
+    mycursor.executemany(query, values)
+    mydb.commit()
+
+    print(LOG.format(f"{mycursor.rowcount} doctor(s) was inserted."))
+
+
 if __name__ == "__main__":
 
     # Initialize connection to database
@@ -146,18 +208,26 @@ if __name__ == "__main__":
         mydb = msql.connect(**CONN)
         mycursor = mydb.cursor()
 
-        mycursor.execute("SHOW TABLES")
-        tables = [x[0] for x in mycursor.fetchall()]
-        print(f"Tables: {tables}")
-
         command = input('\n>> ')
 
-        if re.search(CREATE_SCHEMA, command):
+        try:
 
-            CREATE_SCHEMA_HANDLER(command)
-            continue
+            if re.search(CREATE_SCHEMA, command):
 
-        elif re.search(CREATE_TABLE, command):
+                CREATE_SCHEMA_HANDLER(command)
+                continue
 
-            CREATE_TABLE_HANDLER(command)
+            elif re.search(CREATE_TABLE, command):
+
+                CREATE_TABLE_HANDLER(command)
+                continue
+
+            elif re.search(ADD_DOCTOR, command):
+
+                ADD_DOCTOR_HANDLER(command)
+                continue
+
+        except Exception as e:
+
+            print(e)
             continue
