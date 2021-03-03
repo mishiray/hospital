@@ -1,5 +1,5 @@
 from typing import Tuple
-import mysql.connector
+import mysql
 import json
 import re
 import os
