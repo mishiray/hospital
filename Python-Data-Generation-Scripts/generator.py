@@ -159,7 +159,7 @@ def ADD_DOCTOR_HANDLER(command):
 
     for i in range(count):
 
-        doctor_id = 'HTD-' + str(randint(100, 200)) + \
+        doctor_id = 'htd-' + str(randint(100, 200)) + \
             '-' + str(randint(100, 120))
         name = names.get_full_name(gender='male')
         email = name.replace(' ', '.').lower() + '@doctors.ht.com'

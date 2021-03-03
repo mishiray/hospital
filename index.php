@@ -4,7 +4,7 @@ session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: dashboard.php");
+    header("location: default.php");
     exit;
 }
 
@@ -14,6 +14,7 @@ $username = $password = $rolw = "";
 $username_err = $password_err = $role_err = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST["login"])){
+
     // Check if username is empty
     $err = 0;
     $fail = "";
@@ -22,60 +23,75 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST["login"])){
         $fail .= "<p>Please enter username.</p>";
         $err++;
     } else{
-        $username = trim($_POST["username"]);
+        $username = strtolower(trim($_POST["username"]));
     }
 
     if(empty($_POST["role"])){
         $fail .= "<p>Please select role.</p>";
         $err++;
     } else{
-        $role = trim($_POST["role"]);
+        $role = $_POST["role"];
     }
-    
+    echo $rolw;
     // Check if password is empty
-    if(empty(trim($_POST["password"]))){
+    if(empty($_POST["password"])){
         $fail .= "<p>Please enter your password.</p>";
         $err++;
     } else{
-        $password = trim($_POST["password"]);
+        $password = $_POST["password"];
     }
     
     // Validate credentials
     if($err == 0){
         // Prepare a select statement
-        $table = $role == "1" ? 'doctor' : 'receptionist';
-        $id = $role == "1" ? 'doctor_id' : 'receptionist_id';
+        switch($role){
+            case 1: 
+                $table = 'doctor';
+                $id = 'doctor_id';
+                break;
+            
+            case 2:
+                $table = 'receptionist';
+                $id = 'receptionist_id';
+                break;
 
-        $sql = "SELECT `password`,`$id`, `email` FROM `$table` WHERE (`username`= '$username' OR `email`= '$username' )";
+            default:
+                $table = 'receptionist';
+                $id = 'receptionist_id';
+                break;
+        }
 
+        $sql = "SELECT `password`,`$id`, `email` FROM `$table` WHERE (`$id`= '$username' OR `email`= '$username' )";
+    //echo $sql;
         $result = mysqli_query($conn, $sql);
 
         if(!empty($result)){
 
             $data = mysqli_fetch_assoc($result);
             $data = $data ? (object)$data : null;
-
             if($data->password==base64_encode($password) ){
 
                 //if ok
                 session_start();
                 
                 //Store user info in session value
-                $user = "SELECT * FROM `$table` WHERE (`username`= '$username' OR `email`= '$username' )";
+                $user = "SELECT * FROM `$table` WHERE (`$id`= '$username' OR `email`= '$username' )";
                 $result = mysqli_query($conn, $user);
                 
                 $userinfo = mysqli_fetch_assoc($result);
                 $userinfo = $userinfo ? (object)$userinfo : null;
-
+                
                 // Store data in session variables
                 $_SESSION["loggedin"] = true;
                 $_SESSION["username"] = $username;  
                 $_SESSION["email"] = $data->email;                            
                 $_SESSION["userinfo"] = $userinfo;
-                           
+
                 // Redirect user to welcome page
-                header("location: dashboard.php");
+                header("location: default.php");
+
             }else{
+
                 // Display an error message if password is not valid
                 $fail .= "<p>The password you entered was not valid.</p>";
             }
@@ -140,15 +156,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST["login"])){
                         <p class="text-primary">Welcome back,</p> 
 
                         <div class="wrap-input100">
-                            <select class="input100" required id="dataUsername" style="min-height: 50px;" name="role">
+                            <select class="input100" required id="role" style="min-height: 50px;" name="role">
                                 <option selected disabled>Choose Role</option>
-                                <option value="1">Doctor</option>
-                                <option value="0">Receptionist</option>
+                                <option value ="2">Receptionist</option>
+                                <option value ="1">Doctor</option>
                             </select>
                         </div>
                         
                         <div class="wrap-input100">
-                            <input class="input100" required id="dataUsername" type="text" name="username">
+                            <input class="input100" required id="username" type="text" name="username">
                         </div>
                         
                         <div class="wrap-input100">
