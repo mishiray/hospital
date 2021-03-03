@@ -39,3 +39,7 @@ $ python generator.py
 ```
 >> Add 10 doctors
 ```
+### Add receptionists
+```
+>> Add 15 receptionists
+```
