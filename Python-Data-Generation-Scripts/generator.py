@@ -38,9 +38,13 @@ def initialize_DB(mycursor):
     schemas = [x[0] for x in mycursor.fetchall()]
 
     if SQL_Q['schema'] not in schemas:
-        mycursor.execute('\n'.join(SQL_Q['create-schema']), multi=True)
+
+        mycursor.execute("DROP SCHEMA IF EXISTS `hospital`")
+        mycursor.execute('\n'.join(SQL_Q['create-schema']))
         print(LOG.format(f"Created schema '{SQL_Q['schema']}'"))
+
     else:
+
         print(LOG.format(f"Schema '{SQL_Q['schema']}' exists."))
 
     # Fetch all tables in hospital
@@ -48,11 +52,17 @@ def initialize_DB(mycursor):
     tables = [x[0] for x in mycursor.fetchall()]
 
     for table in SQL_Q['tables']:
+
         if table not in tables:
+
+            query = '\n'.join(SQL_Q['create-table'][table])
             mycursor.execute(
-                '\n'.join(SQL_Q['create-table'][table]), multi=True)
+                f"DROP TABLE IF EXISTS `{SQL_Q['schema']}`.`{table}`")
+            mycursor.execute(query)
             print(LOG.format(f"Created table '{table}'"))
+
         else:
+
             print(LOG.format(f"Table '{table}' exists."))
 
 
@@ -67,14 +77,25 @@ def CREATE_SCHEMA_HANDLER(command):
         print(f"Schema '{schema}' is invalid within this scope")
         return
 
-    if re.search(YES, input(f"[WARNING] Schema '{schema}' already exist.\nDo you wish to override?\n>> ")):
+    mycursor.execute("SHOW DATABASES")
+    schemas = [x[0] for x in mycursor.fetchall()]
 
-        mycursor.execute('\n'.join(SQL_Q['create-schema']), multi=True)
-        print(LOG.format(f"Re-created schema '{SQL_Q['schema']}'"))
+    if schema in schemas:
+
+        if re.search(YES, input(f"[WARNING] Schema '{schema}' already exist.\nDo you wish to override?\n>> ")):
+
+            mycursor.execute(f"DROP SCHEMA IF EXISTS `{schema}`")
+            mycursor.execute('\n'.join(SQL_Q['create-schema']))
+            print(LOG.format(f"Re-created schema '{SQL_Q['schema']}'"))
+
+        else:
+
+            print(f"[LOG] Aborting creation of schema '{schema}'")
 
     else:
 
-        print(f"[LOG] Aborting creation of schema '{schema}'")
+        mycursor.execute('\n'.join(SQL_Q['create-schema']))
+        print(LOG.format(f"Created schema '{SQL_Q['schema']}'"))
 
 
 def CREATE_TABLE_HANDLER(command):
@@ -88,14 +109,28 @@ def CREATE_TABLE_HANDLER(command):
         print(f"Table '{table}' is invalid within this scope")
         return
 
-    if re.search(YES, input(f"[WARNING] Table '{table}' already exist.\nDo you wish to override?\n>> ")):
+    mycursor.execute("SHOW TABLES")
+    tables = [x[0] for x in mycursor.fetchall()]
 
-        mycursor.execute('\n'.join(SQL_Q['create-table'][table]), multi=True)
-        print(LOG.format(f"Re-created Table '{table}' in schema '{schema}'"))
+    if table in tables:
+
+        if re.search(YES, input(f"[WARNING] Table '{table}' already exist.\nDo you wish to override?\n>> ")):
+
+            query = '\n'.join(SQL_Q['create-table'][table])
+            mycursor.execute(f'DROP TABLE IF EXISTS `{schema}`.`{table}`')
+            mycursor.execute(query)
+            print(LOG.format(
+                f"Re-created Table '{table}' in schema '{schema}'"))
+
+        else:
+
+            print(f"[LOG] Aborting creation of schema '{schema}'")
 
     else:
 
-        print(f"[LOG] Aborting creation of schema '{schema}'")
+        query = '\n'.join(SQL_Q['create-table'][table])
+        mycursor.execute(query)
+        print(LOG.format(f"Created Table '{table}' in schema '{schema}'"))
 
 
 if __name__ == "__main__":
@@ -107,6 +142,13 @@ if __name__ == "__main__":
     initialize_DB(mycursor)
 
     while True:
+
+        mydb = msql.connect(**CONN)
+        mycursor = mydb.cursor()
+
+        mycursor.execute("SHOW TABLES")
+        tables = [x[0] for x in mycursor.fetchall()]
+        print(f"Tables: {tables}")
 
         command = input('\n>> ')
 

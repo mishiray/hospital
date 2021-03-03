@@ -10,12 +10,10 @@
         "room"
     ],
     "create-schema": [
-        "DROP SCHEMA IF EXISTS `hospital`;",
         "CREATE SCHEMA `hospital` DEFAULT CHARACTER SET latin1 ;"
     ],
     "create-table": {
         "admission": [
-            "DROP TABLE IF EXISTS `hospital`.`admission`;",
             "CREATE TABLE IF NOT EXISTS `admission` (",
             "    `id` int(11) NOT NULL AUTO_INCREMENT,",
             "    `patient_id` varchar(50) NOT NULL,",
@@ -30,7 +28,6 @@
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ],
         "appointment": [
-            "DROP TABLE IF EXISTS `hospital`.`appointment`;",
             "CREATE TABLE IF NOT EXISTS `appointment` (",
             "    `id` int(11) NOT NULL AUTO_INCREMENT,",
             "    `receptionist_id` varchar(50) NOT NULL,",
@@ -47,7 +44,6 @@
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ],
         "doctor": [
-            "DROP TABLE IF EXISTS `hospital`.`doctor`;",
             "CREATE TABLE IF NOT EXISTS `hospital`.`doctor` (",
             "    `doctor_id` varchar(50) NOT NULL,",
             "    `name` varchar(250) NOT NULL,",
@@ -61,7 +57,6 @@
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ],
         "nurse": [
-            "DROP TABLE IF EXISTS `hospital`.`nurse`;",
             "CREATE TABLE IF NOT EXISTS `hospital`.`nurse` (",
             "`nurse_id` varchar(50) NOT NULL,",
             "`doctor_id` varchar(50) NOT NULL,",
@@ -75,7 +70,6 @@
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ],
         "patient": [
-            "DROP TABLE IF EXISTS `hospital`.`patient`;",
             "CREATE TABLE IF NOT EXISTS `hospital`.`patient` (",
             "    `patient_id` varchar(50) NOT NULL,",
             "    `receptionist_id` varchar(50) NOT NULL,",
@@ -91,7 +85,6 @@
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ],
         "receptionist": [
-            "DROP TABLE IF EXISTS `hospital`.`receptionist`;",
             "CREATE TABLE IF NOT EXISTS `hospital`.`receptionist` (",
             "    `receptionist_id` varchar(50) NOT NULL,",
             "    `name` varchar(250) NOT NULL,",
@@ -104,7 +97,6 @@
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ],
         "room": [
-            "DROP TABLE IF EXISTS `hospital`.`room`;",
             "CREATE TABLE IF NOT EXISTS `hospital`.`room` (",
             "    `id` int(11) NOT NULL AUTO_INCREMENT,",
             "    `type` varchar(250) NOT NULL,",
