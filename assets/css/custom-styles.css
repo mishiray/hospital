@@ -20,7 +20,7 @@ body {
 #page-wrapper {
     padding: 15px 15px;
     min-height: 600px;
-    background: #ececec;
+    background: #fff;
 }
 #page-inner {
     width:100%;
@@ -91,7 +91,7 @@ border-radius:0px;
   -moz-box-shadow: 0 0 10px #757575;
   /* -webkit-box-shadow: 0 0 10px #757575; */
 }
-.top-navbar .nav > li > a:hover, .top-navbar .nav > li > a:focus {text-decoration: none;background-color: #e0e8f5;color: #fff;}
+.top-navbar .nav > li > a:hover, .top-navbar .nav > li > a:focus {text-decoration: none;background-color: #e0e8f5;color: #075CB3;}
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
 background-color: #075CB3;
 border-color: #075CB3;
@@ -135,7 +135,7 @@ border-color: #075CB3;
 /*----------------------------------------------
    DASHBOARD STYLES    
 ------------------------------------------------*/
-.page-header {padding-bottom: 0;margin: 0;border-bottom: 1px solid transparent;text-align: left;background-color: transparent;padding: 32px 22px 10px 28px;color: #323232;}
+.page-header {padding-bottom: 0;margin: 0;border-bottom: 1px solid transparent;text-align: left;background-color: #fff;padding: 32px 22px 10px 28px;color: #0866C6;}
 .panel-left{  
 width: 100px;
 height: 100px;background: #0866C6;/* border: 2px solid #4590DA; */
@@ -227,7 +227,7 @@ width:100%;
 /* background-color: #1CC09F; */
 color: #fff;
 }
- .blue {background-color: #FFFFFF;color: #002A4C;}
+ .blue {background-color: #2196F3 ;color: #ffffff;}
   .red {
 background-color: #FB6E51;
 color:#fff;
@@ -313,7 +313,6 @@ line-height: 30px;
 	text-align: center;
 	width: 120px;
 	height: 120px;
-	margin: 20px auto 10px auto;
 }
 
 .easypiechart .percent {
@@ -374,7 +373,7 @@ max-width:170px;
 .top-navbar{
 margin:0px;
 }
-.top-navbar .navbar-brand {color: #fff;width: 260px;text-align: left;height: 60px;font-size: 24px;font-weight: 700;/* text-transform: uppercase; */line-height: 30px;background: #f44336;}
+.top-navbar .navbar-brand {color: #fff;width: 260px;text-align: left;height: 60px;font-size: 24px;font-weight: 700;/* text-transform: uppercase; */line-height: 30px;background: #2196f3;}
 .navbar-brand b{
 color: #4BD28C;
 }
@@ -385,7 +384,7 @@ margin: 0px;
 padding: 0px;
 }
 .top-navbar .nav > li > a {position: relative;display: block;padding: 17px;color: #484848;margin: 0px;}
-.top-navbar .nav > li > a:hover, .top-navbar .nav > li > a:focus {text-decoration: none;color: #f44336 !important;background: transparent;}
+.top-navbar .nav > li > a:hover, .top-navbar .nav > li > a:focus {text-decoration: none;color: #2196f3 !important;background: transparent;}
 .top-navbar .dropdown-menu{
 min-width: 230px;
 border-radius: 0 0 4px 4px;
@@ -414,7 +413,7 @@ padding-top: 4px;
     background-color: #233342 !important;
     color: #fff !important;
 }
-.active-menu i{color: #f44336 !important;}
+.active-menu i{color: #2196f3 !important;}
 .arrow {
     float: right;
     margin-top: 8px;
@@ -475,7 +474,7 @@ ul.nav.nav-second-level.collapse.in {background: #121821;}
 	border-bottom:none;
 }
 .top-navbar .nav > li > a > i {margin-right: 0;}
-.top-navbar .navbar-brand:hover {color: #FFFFFF;background-color: #f44336;}
+.top-navbar .navbar-brand:hover {color: #FFFFFF;background-color: #2196f3;}
 .dropdown-user li {
 margin: 8px 0;
 }
@@ -483,7 +482,7 @@ margin: 8px 0;
 .navbar-header {
     background: transparent;
 }
-.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #f44336;}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {background-color: #2196f3;}
 .navbar-default .navbar-toggle {border-color: #ffffff;}
 
 .navbar-default .navbar-toggle .icon-bar {background-color: #ffffff;}
@@ -502,7 +501,7 @@ margin: 8px 0;
     float: left;
     left: 0;
     z-index: 3;
-    color: #f44336;
+    color: #2196f3;
     cursor:pointer;
     border-radius: 0;
     width: 14px;
@@ -522,19 +521,32 @@ ul.dropdown-menu.dropdown-messages li a div {
   padding: 2px 0;
 }
 #page-wrapper{
-	background: #e0e8f5;
+	background: #fff;
 }
 .dashboard-cards .card-stacked{
-	color:#fff;
-	border-left: 1px solid rgba(255, 255, 255, 0.18);
+    text-align: left;
+    border-radius: 10px;
+    border-color: #075CB3;
+    border-width: 1px;
+    padding: 40px;
 }
 .dashboard-cards .card-content{
-	border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    
+    height: 110px;
+    width: 110px;
+    padding: 0;
+}
+.dashboard-cards .card-action {
+    padding: 0;
+    margin-bottom: 20px;
+    text-align: left;
 }
 .dashboard-cards .card-action strong{
+    
+    text-align: left;
 	font-weight:700;
 	font-size: 16px;
-	color: rgba(255, 255, 255, 0.65);
+	color: rgba(255, 255, 255, 1);
 }
 .donutpad {
     padding: 32px 0;
@@ -546,7 +558,8 @@ ul.dropdown-menu.dropdown-messages li a div {
 	text-transform:uppercase;
 }
 .collection .collection-item{
-	padding: 16px 20px;
+	
+padding: 16px 20px;
 }
 /*----------------------------------------------
     UI ELEMENTS STYLES     
@@ -670,7 +683,7 @@ font-size: 19px;
 .icon-preview span {
     display: inherit;
 }
-.header .breadcrumb:before{
+.header .breadcrumb:before{    
 	    font-size: 14px;
 	    margin-right: 0px;
 	    color: #717171;
@@ -682,12 +695,15 @@ font-size: 19px;
 	text-decoration: none;
 	color: #717171;
 	text-decoration: none;
-	color: #f44336;
+	color: #2196f3;
 }
 .dropdown-content li{
-	padding: 15px;
-	color: #233342;
-	font-size: 13px;
+	
+padding: 15px;
+	
+color: #233342;
+	
+font-size: 13px;
 }
 .taskList li{padding: 20px 15px 5px;background: #fff;font-size: 12px;}
 .taskList > div{
@@ -701,12 +717,13 @@ padding: 0 15px 0px 15px;
 }
 .taskList li:last-child {
     padding-top: 5px;
-    color: #f44336;
+    color: #2196f3;
 }
+
  @media(max-width:768px) {
 	  
 	 .navbar-header {
-		background: #f44336;
+		background: #2196f3;
 	}
 	.navbar-side {
 		z-index: 2;
@@ -738,3 +755,35 @@ padding: 0 15px 0px 15px;
 			padding:17px 9px;
 		}
  }
+  
+ .navbutton{
+    background-color: #2196f3;
+    border-radius: 100%;
+    margin: 5px!important;
+    color: #fff !important;
+}
+.navbutton > i{
+    color: #fff !important;
+}
+
+.navbar-right{
+    margin-right: 0!important;
+}
+.dtext{
+    margin-top: inherit;
+    margin-left: 5px;
+    font-size: 7px;
+    color: #fff;
+}
+.dbase{
+    margin-bottom: 20px;
+}
+.logo{
+    width: 150px;
+  }
+  .nurses{
+    max-width: 150px;
+    margin-left: 15px;
+    margin-right: 15px;
+    color: #075CB3;
+  }

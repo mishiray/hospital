@@ -586,7 +586,6 @@ input.input100 {
 .alert-validate::before {
   content: attr(data-validate);
   position: absolute;
-  z-index: 100;
   max-width: 70%;
   background-color: #fff;
   border: 1px solid #c80000;
@@ -621,7 +620,6 @@ input.input100 {
   font-family: FontAwesome;
   display: block;
   position: absolute;
-  z-index: 110;
   color: #c80000;
   font-size: 16px;
   top: 50%;
