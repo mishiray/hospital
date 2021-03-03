@@ -1,16 +1,16 @@
 from typing import Tuple
-import mysql.connector
+import mysql
 import json
 import re
 
 LOG = "[LOG] {}"
 
 # Load connection.json
-with open('Python-Data-Generation-Scripts/connection.json') as json_data:
+with open('connection.json') as json_data:
     CONN = json.load(json_data)
 
 # Load sql-query.json
-with open('Python-Data-Generation-Scripts/sql-query.json') as json_data:
+with open('sql-query.json') as json_data:
     SQL_Q = json.load(json_data)
 
 # COMMANDS
