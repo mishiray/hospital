@@ -36,6 +36,7 @@ IN = r"in"
 CREATE_TABLE = f"{CREATE} {TABLE} \w+ {IN} {SCHEMA} \w+"
 CREATE_SCHEMA = f"{CREATE} {SCHEMA} \w+"
 ADD_DOCTOR = f"{ADD} \d+ docto(r|rs)"
+ADD_RECEPTIONIST = f"{ADD} \d+ receptionis(t|ts)"
 YES = r"(y|Y|yes|Yes|YES)"
 NO = r"(n|N|no|No|NO)"
 
@@ -148,7 +149,7 @@ def CREATE_TABLE_HANDLER(command):
 def ADD_DOCTOR_HANDLER(command):
 
     command = re.search(ADD_DOCTOR, command).group()
-    keywords = ADD + '|' + 'doctors'
+    keywords = ADD + '|' + 'docto(r|rs)'
     kwstripped = re.sub(keywords, '', command)
     count = int(re.search(r"\d+", kwstripped).group())
 
@@ -195,6 +196,55 @@ def ADD_DOCTOR_HANDLER(command):
     print(LOG.format(f"{mycursor.rowcount} doctor(s) was inserted."))
 
 
+def ADD_RECEPTIONIST_HANDLER(command):
+
+    command = re.search(ADD_RECEPTIONIST, command).group()
+    keywords = ADD + '|' + 'receptionis(t|ts)'
+    kwstripped = re.sub(keywords, '', command)
+    count = int(re.search(r"\d+", kwstripped).group())
+
+    query = SQL_Q['insert-into']['receptionist']
+    mycursor.execute("SELECT * FROM receptionist")
+    receptionists = mycursor.fetchall()
+    values = []
+
+    for i in range(count):
+
+        receptionist_id = 'htr-' + str(randint(100, 200)) + \
+            '-' + str(randint(100, 120))
+        name = names.get_full_name(gender='male')
+        email = name.replace(' ', '.').lower() + '@receptionists.ht.com'
+
+        password = 'password'
+        password_bytes = password.encode('ascii')
+        base64_bytes = base64.b64encode(password_bytes)
+        base64_password = base64_bytes.decode('ascii')
+
+        phone = '+' + str(randint(100, 999)) + '-' + \
+            str(randint(100, 999)) + '-' + str(randint(100, 999)) + \
+            '-' + str(randint(1000, 9999))
+        address = str(randint(10, 99)) + ' ' + \
+            names.get_first_name() + ' Street, Lagos, Nigeria.'
+        dateadded = datetime.datetime.now()
+
+        receptionist = (receptionist_id, name, email, base64_password, phone,
+                        address, dateadded)
+
+        if receptionist_id not in [x[0] for x in receptionists]:
+
+            values.append(receptionist)
+            receptionists.append(receptionist)
+
+        else:
+
+            continue
+
+    mycursor.executemany(query, values)
+    mydb.commit()
+
+    print(LOG.format(f"{mycursor.rowcount} receptionist(s) was inserted."))
+
+
 if __name__ == "__main__":
 
     # Initialize connection to database
@@ -225,6 +275,11 @@ if __name__ == "__main__":
             elif re.search(ADD_DOCTOR, command):
 
                 ADD_DOCTOR_HANDLER(command)
+                continue
+
+            elif re.search(ADD_RECEPTIONIST, command):
+
+                ADD_RECEPTIONIST_HANDLER(command)
                 continue
 
         except Exception as e:
