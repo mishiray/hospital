@@ -7,9 +7,11 @@
         exit;
     }
 
+    //doc name
     $userinfo = $_SESSION["userinfo"];
     $name = ucwords($userinfo->name);
 
+    //nurses on duty
     $sql = "SELECT * FROM `nurses` WHERE (`doctor_id`= '$userinfo->doctor_id')";
     
     $result = mysqli_query($conn, $sql);
@@ -19,6 +21,18 @@
             $mynurses = mysqli_fetch_assoc($result);
 
             $nurses = $mynurses ? (object)$mynurses : null;
+
+        }
+
+    //num of new patients
+    $today = date("Y/m/d");
+    $sql = "SELECT * FROM `patient` WHERE ( DATE_FORMAT(`dateadded`, '%Y/%m/%d') = '$today')";
+    
+    $result = mysqli_query($conn, $sql);
+
+        if(!empty($result)){
+
+            $new_patients = mysqli_num_rows($result);
 
         }
 ?>
@@ -58,7 +72,7 @@
                                                 <strong>Patients</strong>
                                             </div>
                                             <div class="card-content">
-                                                <h3 class="dbase">4 <small class="pull-right dtext">Today</small></h3> 
+                                                <h3 class="dbase"> <?php echo $new_patients ?> <small class="pull-right dtext">Today</small></h3> 
                                                 <h3 class="">84 <small class="pull-right dtext">All time</small></h3> 
                                             </div>
                                         </div>

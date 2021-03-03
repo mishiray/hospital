@@ -62,7 +62,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" and isset($_POST["login"])){
         }
 
         $sql = "SELECT `password`,`$id`, `email` FROM `$table` WHERE (`$id`= '$username' OR `email`= '$username' )";
-    //echo $sql;
+        //echo $sql;
         $result = mysqli_query($conn, $sql);
 
         if(!empty($result)){
