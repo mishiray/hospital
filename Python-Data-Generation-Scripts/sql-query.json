@@ -1,4 +1,21 @@
 {
+<<<<<<< HEAD
+=======
+    "schema": "hospital",
+    "tables": [
+        "admission",
+        "appointment",
+        "doctor",
+        "nurse",
+        "patient",
+        "receptionist",
+        "room"
+    ],
+    "create-schema": [
+        "DROP SCHEMA IF EXISTS `hospital`;",
+        "CREATE SCHEMA `hospital` DEFAULT CHARACTER SET latin1 ;"
+    ],
+>>>>>>> 421d4b23b3f613eb39eecfa48192ac3c048a1b68
     "create-table": {
         "admission": [
             "DROP TABLE IF EXISTS `hospital`.`admission`;",
