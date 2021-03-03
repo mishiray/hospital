@@ -1,7 +1,7 @@
 # Python Data Generation Scripts
 This python script will automatically generate data for the hospital database.
 
-## Requirement
+## Requirements
 
 - Python 3.xx or Python 2.xx
 - MySql - `mysql`
