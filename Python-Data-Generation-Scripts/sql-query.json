@@ -105,5 +105,87 @@
             "    PRIMARY KEY (`id`)",
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ]
+    },
+    "insert-into": {
+        "admission": [
+            "CREATE TABLE IF NOT EXISTS `admission` (",
+            "    `id` int(11) NOT NULL AUTO_INCREMENT,",
+            "    `patient_id` varchar(50) NOT NULL,",
+            "    `room_id` int(11) NOT NULL,",
+            "    `report` longtext NOT NULL,",
+            "    `admitted_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    `discharge_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    PRIMARY KEY (`id`),",
+            "    KEY `patient_id` (`patient_id`),",
+            "    KEY `room_id` (`room_id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ],
+        "appointment": [
+            "CREATE TABLE IF NOT EXISTS `appointment` (",
+            "    `id` int(11) NOT NULL AUTO_INCREMENT,",
+            "    `receptionist_id` varchar(50) NOT NULL,",
+            "    `doctor_id` varchar(50) NOT NULL,",
+            "    `patient_id` varchar(50) NOT NULL,",
+            "    `report` longtext NOT NULL,",
+            "    `app_date` datetime NOT NULL,",
+            "    `next_app_date` datetime DEFAULT NULL,",
+            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    PRIMARY KEY (`id`),",
+            "    KEY `receptionist_id` (`receptionist_id`),",
+            "    KEY `doctor_id` (`doctor_id`),",
+            "    KEY `patient_id` (`patient_id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ],
+        "doctor": "INSERT INTO `hospital`.`doctor` (doctor_id, name, email, password, phone, address, specialization, dateadded) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+        "nurse": [
+            "CREATE TABLE IF NOT EXISTS `hospital`.`nurse` (",
+            "`nurse_id` varchar(50) NOT NULL,",
+            "`doctor_id` varchar(50) NOT NULL,",
+            "`name` varchar(250) NOT NULL,",
+            "`email` varchar(50) NOT NULL,",
+            "`phone` varchar(20) NOT NULL,",
+            "`address` longtext NOT NULL,",
+            "`dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "PRIMARY KEY (`nurse_id`),",
+            "KEY `doctor_id` (`doctor_id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ],
+        "patient": [
+            "CREATE TABLE IF NOT EXISTS `hospital`.`patient` (",
+            "    `patient_id` varchar(50) NOT NULL,",
+            "    `receptionist_id` varchar(50) NOT NULL,",
+            "    `name` varchar(250) NOT NULL,",
+            "    `status` int(1) DEFAULT '1',",
+            "    `dob` date NOT NULL,",
+            "    `gender` varchar(10) DEFAULT NULL,",
+            "    `phone` varchar(20) NOT NULL,",
+            "    `email` varchar(50) NOT NULL,",
+            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    PRIMARY KEY (`patient_id`),",
+            "    KEY `receptionist_id` (`receptionist_id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ],
+        "receptionist": [
+            "CREATE TABLE IF NOT EXISTS `hospital`.`receptionist` (",
+            "    `receptionist_id` varchar(50) NOT NULL,",
+            "    `name` varchar(250) NOT NULL,",
+            "    `email` varchar(50) NOT NULL,",
+            "    `password` varchar(250) NOT NULL,",
+            "    `phone` varchar(20) NOT NULL,",
+            "    `address` longtext NOT NULL,",
+            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    PRIMARY KEY (`receptionist_id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ],
+        "room": [
+            "CREATE TABLE IF NOT EXISTS `hospital`.`room` (",
+            "    `id` int(11) NOT NULL AUTO_INCREMENT,",
+            "    `type` varchar(250) NOT NULL,",
+            "    `status` int(1) NOT NULL DEFAULT '0',",
+            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
+            "    PRIMARY KEY (`id`)",
+            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
+        ]
     }
 }
