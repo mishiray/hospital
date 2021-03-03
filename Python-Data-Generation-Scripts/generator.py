@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import sqlalchemy
-=======
 from typing import Tuple
 import mysql.connector
 import json
@@ -118,4 +115,3 @@ if __name__ == "__main__":
 
             CREATE_TABLE_HANDLER(command)
             continue
->>>>>>> 421d4b23b3f613eb39eecfa48192ac3c048a1b68
