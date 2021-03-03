@@ -37,6 +37,7 @@ CREATE_TABLE = f"{CREATE} {TABLE} \w+ {IN} {SCHEMA} \w+"
 CREATE_SCHEMA = f"{CREATE} {SCHEMA} \w+"
 ADD_DOCTOR = f"{ADD} \d+ docto(r|rs)"
 ADD_RECEPTIONIST = f"{ADD} \d+ receptionis(t|ts)"
+ADD_ROOM = f"{ADD} \d+ roo(m|ms)"
 YES = r"(y|Y|yes|Yes|YES)"
 NO = r"(n|N|no|No|NO)"
 
@@ -162,7 +163,7 @@ def ADD_DOCTOR_HANDLER(command):
 
         doctor_id = 'htd-' + str(randint(100, 200)) + \
             '-' + str(randint(100, 120))
-        name = names.get_full_name(gender='male')
+        name = names.get_full_name()
         email = name.replace(' ', '.').lower() + '@doctors.ht.com'
 
         password = 'password'
@@ -212,7 +213,7 @@ def ADD_RECEPTIONIST_HANDLER(command):
 
         receptionist_id = 'htr-' + str(randint(100, 200)) + \
             '-' + str(randint(100, 120))
-        name = names.get_full_name(gender='male')
+        name = names.get_full_name()
         email = name.replace(' ', '.').lower() + '@receptionists.ht.com'
 
         password = 'password'
@@ -243,6 +244,31 @@ def ADD_RECEPTIONIST_HANDLER(command):
     mydb.commit()
 
     print(LOG.format(f"{mycursor.rowcount} receptionist(s) was inserted."))
+
+
+def ADD_ROOM_HANDLER(command):
+
+    command = re.search(ADD_ROOM, command).group()
+    keywords = ADD + '|' + 'roo(m|ms)'
+    kwstripped = re.sub(keywords, '', command)
+    count = int(re.search(r"\d+", kwstripped).group())
+
+    query = SQL_Q['insert-into']['room']
+    values = []
+
+    for i in range(count):
+
+        type = str(randint(1, 5))
+        status = 0
+        dateadded = datetime.datetime.now()
+
+        room = (type, status, dateadded)
+        values.append(room)
+
+    mycursor.executemany(query, values)
+    mydb.commit()
+
+    print(LOG.format(f"{mycursor.rowcount} room(s) was inserted."))
 
 
 if __name__ == "__main__":
@@ -280,6 +306,11 @@ if __name__ == "__main__":
             elif re.search(ADD_RECEPTIONIST, command):
 
                 ADD_RECEPTIONIST_HANDLER(command)
+                continue
+
+            elif re.search(ADD_ROOM, command):
+
+                ADD_ROOM_HANDLER(command)
                 continue
 
         except Exception as e:

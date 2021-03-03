@@ -167,14 +167,6 @@
             ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
         ],
         "receptionist": "INSERT INTO `hospital`.`receptionist` (receptionist_id, name, email, password, phone, address, dateadded) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-        "room": [
-            "CREATE TABLE IF NOT EXISTS `hospital`.`room` (",
-            "    `id` int(11) NOT NULL AUTO_INCREMENT,",
-            "    `type` varchar(250) NOT NULL,",
-            "    `status` int(1) NOT NULL DEFAULT '0',",
-            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
-            "    PRIMARY KEY (`id`)",
-            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
-        ]
+        "room": "INSERT INTO `hospital`.`room` (type, status, dateadded) VALUES (%s, %s, %s)"
     }
 }
