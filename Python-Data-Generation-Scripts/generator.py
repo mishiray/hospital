@@ -1,9 +1,13 @@
 from typing import Tuple
-import mysql
+import mysql.connector as msql
 import json
 import re
+import os
 
 LOG = "[LOG] {}"
+
+if 'Python-Data-Generation-Scripts' in os.listdir():
+    os.chdir('Python-Data-Generation-Scripts')
 
 # Load connection.json
 with open('connection.json') as json_data:
@@ -97,7 +101,7 @@ def CREATE_TABLE_HANDLER(command):
 if __name__ == "__main__":
 
     # Initialize connection to database
-    mydb = mysql.connector.connect(**CONN)
+    mydb = msql.connect(**CONN)
     mycursor = mydb.cursor()
 
     initialize_DB(mycursor)

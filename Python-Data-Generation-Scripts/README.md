@@ -4,7 +4,7 @@ This python script will automatically generate data for the hospital database.
 ## Requirements
 
 - Python 3.xx or Python 2.xx
-- MySql - `mysql`
+- MySqlMySQL Connector - `mysql-connector-python`
 - Regular expressions - `re`
 - Json - `json`
 
