@@ -331,7 +331,6 @@ def ADD_NURSE_HANDLER(command):
         f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} nurse(s) was inserted."))
 
 
-# "INSERT INTO `hospital`.`patient` (patient_id, receptionist_id, name, status, dob, gender, phone, email, dateadded) VALUES (%s, %s, %s, %s, %s, %s)",
 def ADD_PATIENT_HANDLER(command):
 
     command = re.search(ADD_PATIENT, command).group()
@@ -360,7 +359,7 @@ def ADD_PATIENT_HANDLER(command):
             '-' + str(randint(1000, 9999))
 
         name = names.get_full_name()
-        receptionist_id = choice(receptionists)
+        receptionist_id = choice(receptionists)[0]
         year = randint(1970, 2020)
         month = randint(1, 12)
         day = randint(1, 29 if month == 2 else 30 if month in [
