@@ -365,7 +365,6 @@ def ADD_PATIENT_HANDLER(command):
         day = randint(1, 29 if month == 2 else 30 if month in [
                       9, 4, 6, 11] else 31)
         dob = datetime.date(year, month, day)
-        print(f'DOB: {dob}')
         gender = choice(['male', 'female'])
         email = name.replace(' ', '.').lower() + '@email.com'
         dateadded = datetime.datetime.now()
