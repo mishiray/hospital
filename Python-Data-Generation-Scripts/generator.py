@@ -4,7 +4,7 @@ import json
 import re
 import os
 import names
-from random import randint
+from random import (randint, choice)
 import datetime
 import base64
 
@@ -38,6 +38,8 @@ CREATE_SCHEMA = f"{CREATE} {SCHEMA} \w+"
 ADD_DOCTOR = f"{ADD} \d+ docto(r|rs)"
 ADD_RECEPTIONIST = f"{ADD} \d+ receptionis(t|ts)"
 ADD_ROOM = f"{ADD} \d+ roo(m|ms)"
+ADD_NURSE = f"{ADD} \d+ nurs(e|es)"
+ADD_PATIENT = f"{ADD} \d+ patien(t|ts)"
 YES = r"(y|Y|yes|Yes|YES)"
 NO = r"(n|N|no|No|NO)"
 
@@ -161,6 +163,15 @@ def ADD_DOCTOR_HANDLER(command):
 
     for i in range(count):
 
+        mycursor.execute("SELECT * FROM nurse WHERE doctor_id IS NULL")
+
+        free_nurses = mycursor.fetchall()
+
+        if free_nurses == None:
+
+            print("[WARNING] There are not enough nurses. Aborting operation")
+            break
+
         doctor_id = 'htd-' + str(randint(100, 200)) + \
             '-' + str(randint(100, 120))
         name = names.get_full_name()
@@ -186,6 +197,9 @@ def ADD_DOCTOR_HANDLER(command):
 
             values.append(doctor)
             doctors.append(doctor)
+            mycursor.execute(
+                f"UPDATE nurse SET doctor_id = '{doctor_id}' WHERE nurse_id = '{choice(free_nurses)[0]}'")
+            mydb.commit()
 
         else:
 
@@ -194,7 +208,8 @@ def ADD_DOCTOR_HANDLER(command):
     mycursor.executemany(query, values)
     mydb.commit()
 
-    print(LOG.format(f"{mycursor.rowcount} doctor(s) was inserted."))
+    print(LOG.format(
+        f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} doctor(s) was inserted."))
 
 
 def ADD_RECEPTIONIST_HANDLER(command):
@@ -271,6 +286,109 @@ def ADD_ROOM_HANDLER(command):
     print(LOG.format(f"{mycursor.rowcount} room(s) was inserted."))
 
 
+def ADD_NURSE_HANDLER(command):
+
+    command = re.search(ADD_NURSE, command).group()
+    keywords = ADD + '|' + 'nurs(e|es)'
+    kwstripped = re.sub(keywords, '', command)
+    count = int(re.search(r"\d+", kwstripped).group())
+
+    query = SQL_Q['insert-into']['nurse']
+    mycursor.execute("SELECT * FROM doctor")
+    nurses = mycursor.fetchall()
+    values = []
+
+    for i in range(count):
+
+        nurse_id = 'htn-' + str(randint(100, 200)) + \
+            '-' + str(randint(100, 120))
+        name = names.get_full_name(gender='female')
+        email = name.replace(' ', '.').lower() + '@nurses.ht.com'
+
+        phone = '+' + str(randint(100, 999)) + '-' + \
+            str(randint(100, 999)) + '-' + str(randint(100, 999)) + \
+            '-' + str(randint(1000, 9999))
+        address = str(randint(10, 99)) + ' ' + \
+            names.get_first_name() + ' Street, Lagos, Nigeria.'
+        dateadded = datetime.datetime.now()
+
+        nurse = (nurse_id, name, email, phone,
+                 address, dateadded)
+
+        if nurse_id not in [x[0] for x in nurses]:
+
+            values.append(nurse)
+            nurses.append(nurse)
+
+        else:
+
+            continue
+
+    mycursor.executemany(query, values)
+    mydb.commit()
+
+    print(LOG.format(
+        f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} nurse(s) was inserted."))
+
+
+# "INSERT INTO `hospital`.`patient` (patient_id, receptionist_id, name, status, dob, gender, phone, email, dateadded) VALUES (%s, %s, %s, %s, %s, %s)",
+def ADD_PATIENT_HANDLER(command):
+
+    command = re.search(ADD_PATIENT, command).group()
+    keywords = ADD + '|' + 'patien(t|ts)'
+    kwstripped = re.sub(keywords, '', command)
+    count = int(re.search(r"\d+", kwstripped).group())
+
+    query = SQL_Q['insert-into']['patient']
+    mycursor.execute("SELECT * FROM patient")
+    patients = mycursor.fetchall()
+    mycursor.execute("SELECT * FROM receptionist")
+    receptionists = mycursor.fetchall()
+    values = []
+
+    if receptionists == [] or receptionists == None:
+
+        raise Exception(
+            "[WARNING] There are no receptionists. Aborting operation")
+
+    for i in range(count):
+
+        patient_id = 'htp-' + str(randint(100, 200)) + \
+            '-' + str(randint(100, 120))
+        phone = '+' + str(randint(100, 999)) + '-' + \
+            str(randint(100, 999)) + '-' + str(randint(100, 999)) + \
+            '-' + str(randint(1000, 9999))
+
+        name = names.get_full_name()
+        receptionist_id = choice(receptionists)
+        year = randint(1970, 2020)
+        month = randint(1, 12)
+        day = randint(1, 29 if month == 2 else 30 if month in [
+                      9, 4, 6, 11] else 31)
+        dob = datetime.date(year, month, day)
+        gender = choice(['male', 'female'])
+        email = name.replace(' ', '.').lower() + '@email.com'
+        dateadded = datetime.datetime.now()
+
+        patient = (patient_id, receptionist_id, name,
+                   dob, gender, phone, email, dateadded)
+
+        if patient_id not in [x[0] for x in patients]:
+
+            values.append(patient)
+            patients.append(patient)
+
+        else:
+
+            continue
+
+    mycursor.executemany(query, values)
+    mydb.commit()
+
+    print(LOG.format(
+        f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} patient(s) was inserted."))
+
+
 if __name__ == "__main__":
 
     # Initialize connection to database
@@ -311,6 +429,16 @@ if __name__ == "__main__":
             elif re.search(ADD_ROOM, command):
 
                 ADD_ROOM_HANDLER(command)
+                continue
+
+            elif re.search(ADD_NURSE, command):
+
+                ADD_NURSE_HANDLER(command)
+                continue
+
+            elif re.search(ADD_PATIENT, command):
+
+                ADD_PATIENT_HANDLER(command)
                 continue
 
         except Exception as e:
