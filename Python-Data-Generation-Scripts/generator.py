@@ -331,7 +331,6 @@ def ADD_NURSE_HANDLER(command):
         f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} nurse(s) was inserted."))
 
 
-# "INSERT INTO `hospital`.`patient` (patient_id, receptionist_id, name, status, dob, gender, phone, email, dateadded) VALUES (%s, %s, %s, %s, %s, %s)",
 def ADD_PATIENT_HANDLER(command):
 
     command = re.search(ADD_PATIENT, command).group()
