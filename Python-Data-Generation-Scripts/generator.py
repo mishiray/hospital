@@ -359,12 +359,13 @@ def ADD_PATIENT_HANDLER(command):
             '-' + str(randint(1000, 9999))
 
         name = names.get_full_name()
-        receptionist_id = choice(receptionists)
+        receptionist_id = choice(receptionists)[0]
         year = randint(1970, 2020)
         month = randint(1, 12)
         day = randint(1, 29 if month == 2 else 30 if month in [
                       9, 4, 6, 11] else 31)
         dob = datetime.date(year, month, day)
+        print(f'DOB: {dob}')
         gender = choice(['male', 'female'])
         email = name.replace(' ', '.').lower() + '@email.com'
         dateadded = datetime.datetime.now()
@@ -403,79 +404,44 @@ if __name__ == "__main__":
 
         command = input('\n>> ')
 
-        # try:
+        try:
 
-        #     if re.search(CREATE_SCHEMA, command):
+            if re.search(CREATE_SCHEMA, command):
 
-        #         CREATE_SCHEMA_HANDLER(command)
-        #         continue
+                CREATE_SCHEMA_HANDLER(command)
+                continue
 
-        #     elif re.search(CREATE_TABLE, command):
+            elif re.search(CREATE_TABLE, command):
 
-        #         CREATE_TABLE_HANDLER(command)
-        #         continue
+                CREATE_TABLE_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_DOCTOR, command):
+            elif re.search(ADD_DOCTOR, command):
 
-        #         ADD_DOCTOR_HANDLER(command)
-        #         continue
+                ADD_DOCTOR_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_RECEPTIONIST, command):
+            elif re.search(ADD_RECEPTIONIST, command):
 
-        #         ADD_RECEPTIONIST_HANDLER(command)
-        #         continue
+                ADD_RECEPTIONIST_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_ROOM, command):
+            elif re.search(ADD_ROOM, command):
 
-        #         ADD_ROOM_HANDLER(command)
-        #         continue
+                ADD_ROOM_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_NURSE, command):
+            elif re.search(ADD_NURSE, command):
 
-        #         ADD_NURSE_HANDLER(command)
-        #         continue
+                ADD_NURSE_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_PATIENT, command):
+            elif re.search(ADD_PATIENT, command):
 
-        #         ADD_PATIENT_HANDLER(command)
-        #         continue
+                ADD_PATIENT_HANDLER(command)
+                continue
 
-        # except Exception as e:
+        except Exception as e:
 
-        #     print(e)
-        #     continue
-
-        if re.search(CREATE_SCHEMA, command):
-
-            CREATE_SCHEMA_HANDLER(command)
-            continue
-
-        elif re.search(CREATE_TABLE, command):
-
-            CREATE_TABLE_HANDLER(command)
-            continue
-
-        elif re.search(ADD_DOCTOR, command):
-
-            ADD_DOCTOR_HANDLER(command)
-            continue
-
-        elif re.search(ADD_RECEPTIONIST, command):
-
-            ADD_RECEPTIONIST_HANDLER(command)
-            continue
-
-        elif re.search(ADD_ROOM, command):
-
-            ADD_ROOM_HANDLER(command)
-            continue
-
-        elif re.search(ADD_NURSE, command):
-
-            ADD_NURSE_HANDLER(command)
-            continue
-
-        elif re.search(ADD_PATIENT, command):
-
-            ADD_PATIENT_HANDLER(command)
+            print(e)
             continue
