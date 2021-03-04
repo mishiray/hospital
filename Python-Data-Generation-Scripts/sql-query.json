@@ -139,21 +139,7 @@
         ],
         "doctor": "INSERT INTO `hospital`.`doctor` (doctor_id, name, email, password, phone, address, specialization, dateadded) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
         "nurse": "INSERT INTO `hospital`.`nurse` (nurse_id, name, email, phone, address, dateadded) VALUES (%s, %s, %s, %s, %s, %s)",
-        "patient": [
-            "CREATE TABLE IF NOT EXISTS `hospital`.`patient` (",
-            "    `patient_id` varchar(50) NOT NULL,",
-            "    `receptionist_id` varchar(50) NOT NULL,",
-            "    `name` varchar(250) NOT NULL,",
-            "    `status` int(1) DEFAULT '1',",
-            "    `dob` date NOT NULL,",
-            "    `gender` varchar(10) DEFAULT NULL,",
-            "    `phone` varchar(20) NOT NULL,",
-            "    `email` varchar(50) NOT NULL,",
-            "    `dateadded` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,",
-            "    PRIMARY KEY (`patient_id`),",
-            "    KEY `receptionist_id` (`receptionist_id`)",
-            ") ENGINE=MyISAM DEFAULT CHARSET=latin1;"
-        ],
+        "patient": "INSERT INTO `hospital`.`patient` (patient_id, receptionist_id, name, dob, gender, phone, email, dateadded) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
         "receptionist": "INSERT INTO `hospital`.`receptionist` (receptionist_id, name, email, password, phone, address, dateadded) VALUES (%s, %s, %s, %s, %s, %s, %s)",
         "room": "INSERT INTO `hospital`.`room` (type, status, dateadded) VALUES (%s, %s, %s)"
     }
