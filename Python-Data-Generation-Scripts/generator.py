@@ -440,6 +440,10 @@ if __name__ == "__main__":
                 ADD_PATIENT_HANDLER(command)
                 continue
 
+            else:
+
+                continue
+
         except Exception as e:
 
             print(e)
