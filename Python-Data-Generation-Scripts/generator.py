@@ -403,79 +403,44 @@ if __name__ == "__main__":
 
         command = input('\n>> ')
 
-        # try:
+        try:
 
-        #     if re.search(CREATE_SCHEMA, command):
+            if re.search(CREATE_SCHEMA, command):
 
-        #         CREATE_SCHEMA_HANDLER(command)
-        #         continue
+                CREATE_SCHEMA_HANDLER(command)
+                continue
 
-        #     elif re.search(CREATE_TABLE, command):
+            elif re.search(CREATE_TABLE, command):
 
-        #         CREATE_TABLE_HANDLER(command)
-        #         continue
+                CREATE_TABLE_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_DOCTOR, command):
+            elif re.search(ADD_DOCTOR, command):
 
-        #         ADD_DOCTOR_HANDLER(command)
-        #         continue
+                ADD_DOCTOR_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_RECEPTIONIST, command):
+            elif re.search(ADD_RECEPTIONIST, command):
 
-        #         ADD_RECEPTIONIST_HANDLER(command)
-        #         continue
+                ADD_RECEPTIONIST_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_ROOM, command):
+            elif re.search(ADD_ROOM, command):
 
-        #         ADD_ROOM_HANDLER(command)
-        #         continue
+                ADD_ROOM_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_NURSE, command):
+            elif re.search(ADD_NURSE, command):
 
-        #         ADD_NURSE_HANDLER(command)
-        #         continue
+                ADD_NURSE_HANDLER(command)
+                continue
 
-        #     elif re.search(ADD_PATIENT, command):
+            elif re.search(ADD_PATIENT, command):
 
-        #         ADD_PATIENT_HANDLER(command)
-        #         continue
+                ADD_PATIENT_HANDLER(command)
+                continue
 
-        # except Exception as e:
+        except Exception as e:
 
-        #     print(e)
-        #     continue
-
-        if re.search(CREATE_SCHEMA, command):
-
-            CREATE_SCHEMA_HANDLER(command)
-            continue
-
-        elif re.search(CREATE_TABLE, command):
-
-            CREATE_TABLE_HANDLER(command)
-            continue
-
-        elif re.search(ADD_DOCTOR, command):
-
-            ADD_DOCTOR_HANDLER(command)
-            continue
-
-        elif re.search(ADD_RECEPTIONIST, command):
-
-            ADD_RECEPTIONIST_HANDLER(command)
-            continue
-
-        elif re.search(ADD_ROOM, command):
-
-            ADD_ROOM_HANDLER(command)
-            continue
-
-        elif re.search(ADD_NURSE, command):
-
-            ADD_NURSE_HANDLER(command)
-            continue
-
-        elif re.search(ADD_PATIENT, command):
-
-            ADD_PATIENT_HANDLER(command)
+            print(e)
             continue
