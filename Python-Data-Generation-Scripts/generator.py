@@ -470,7 +470,6 @@ def ADD_ADMISSION_HANDLER(command):
     query = SQL_Q['insert-into']['admission']
     mycursor.execute("SELECT * FROM room")
     rooms = mycursor.fetchall()
-    pprint.pprint(rooms)
     available_rooms = [list(x) for x in rooms if x[2] < x[1]]
     mycursor.execute("SELECT * FROM admission")
     unavailable_patients = [x[1] for x in mycursor.fetchall()]
