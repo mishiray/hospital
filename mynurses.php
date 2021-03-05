@@ -87,7 +87,7 @@
                                                             echo "
                                                             <form action='mynurses.php' method='post'>
                                                                 <input type='hidden' name='nurse_id' value='$nurse[nurse_id]' />
-                                                                <button type='submit' name='triggers' value='unassign' class='btn btn-success btn-sm'>Unssign</button>
+                                                                <button type='submit' name='triggers' value='unassign' class='btn waves-effect waves-light  btn-success btn-sm'>Unssign</button>
                                                             </form>
                                                             ";
                                                         }

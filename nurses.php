@@ -87,11 +87,11 @@
                                                             echo "
                                                             <form action='nurses.php' method='post'>
                                                                 <input type='hidden' name='nurse_id' value='$nurse[nurse_id]' />
-                                                                <button type='submit' name='triggers' value='assign' class='btn btn-success btn-sm'>Assign</button>
+                                                                <button type='submit' name='triggers' value='assign' class='waves-effect waves-light btn'>Assign</button>
                                                             </form>
                                                             ";
                                                         }else{
-                                                            echo '<a class="btn btn-danger">Unavailable<a>';
+                                                            echo '<a class="btn waves-effect waves-light disabled">Unavailable<a>';
                                                         }
 
                                                     ?>
