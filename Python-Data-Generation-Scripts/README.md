@@ -68,7 +68,7 @@ $ python generator.py
 >> Add 50 appointments
 ```
 ### Reset all tables
-> <b>Note:</b> This will clear all data in all the tables.
+> <b>Note:</b> This will clear all data in all the tables.<br>It is reccomended you do this whenever you want to run a new simulation.
 ```
 >> Reset tables
 ```
