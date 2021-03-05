@@ -33,13 +33,15 @@ TABLE = r"((T|t)able|TABLE)"
 SCHEMA = r"((S|s)chema|SCHEMA)"
 ADD = r"((A|a)dd|ADD)"
 IN = r"in"
-CREATE_TABLE = f"{CREATE} {TABLE} \w+ {IN} {SCHEMA} \w+"
-CREATE_SCHEMA = f"{CREATE} {SCHEMA} \w+"
+CREATE_TABLE = f"{CREATE} {TABLE} \w+"
+CREATE_SCHEMA = f"{CREATE} hospital \w+"
 ADD_DOCTOR = f"{ADD} \d+ docto(r|rs)"
 ADD_RECEPTIONIST = f"{ADD} \d+ receptionis(t|ts)"
 ADD_ROOM = f"{ADD} \d+ roo(m|ms)"
 ADD_NURSE = f"{ADD} \d+ nurs(e|es)"
 ADD_PATIENT = f"{ADD} \d+ patien(t|ts)"
+ADD_APPOINTMENT = f"{ADD} \d+ appointmen(t|ts)"
+RESET_TABLE = r"(R|r)eset tabl(e|es)"
 YES = r"(y|Y|yes|Yes|YES)"
 NO = r"(n|N|no|No|NO)"
 
@@ -82,6 +84,16 @@ def initialize_DB(mycursor):
             print(LOG.format(f"Table '{table}' exists."))
 
 
+def RESET_TABLES():
+
+    for table in SQL_Q['tables']:
+        query = '\n'.join(SQL_Q['create-table'][table])
+        mycursor.execute(f'DROP TABLE IF EXISTS `hospital`.`{table}`')
+        mycursor.execute(query)
+        print(LOG.format(
+            f"Re-created Table '{table}' in schema 'hospital'"))
+
+
 def CREATE_SCHEMA_HANDLER(command):
 
     command = re.search(CREATE_SCHEMA, command).group()
@@ -90,7 +102,7 @@ def CREATE_SCHEMA_HANDLER(command):
 
     if schema != SQL_Q['schema']:
 
-        print(f"Schema '{schema}' is invalid within this scope")
+        print(f"Schema 'hospital' is invalid within this scope")
         return
 
     mycursor.execute("SHOW DATABASES")
@@ -98,15 +110,15 @@ def CREATE_SCHEMA_HANDLER(command):
 
     if schema in schemas:
 
-        if re.search(YES, input(f"[WARNING] Schema '{schema}' already exist.\nDo you wish to override?\n>> ")):
+        if re.search(YES, input(f"[WARNING] Schema 'hospital' already exist.\nDo you wish to override?\n>> ")):
 
-            mycursor.execute(f"DROP SCHEMA IF EXISTS `{schema}`")
+            mycursor.execute(f"DROP SCHEMA IF EXISTS `hospital`")
             mycursor.execute('\n'.join(SQL_Q['create-schema']))
             print(LOG.format(f"Re-created schema '{SQL_Q['schema']}'"))
 
         else:
 
-            print(f"[LOG] Aborting creation of schema '{schema}'")
+            print(f"[LOG] Aborting creation of schema 'hospital'")
 
     else:
 
@@ -117,10 +129,10 @@ def CREATE_SCHEMA_HANDLER(command):
 def CREATE_TABLE_HANDLER(command):
 
     command = re.search(CREATE_TABLE, command).group()
-    keywords = CREATE + '|' + TABLE + '|' + IN + '|' + SCHEMA
-    table, schema = tuple(re.sub(keywords, '', command).strip().split())
+    keywords = CREATE + '|' + TABLE
+    table = re.sub(keywords, '', command).strip()
 
-    if table not in SQL_Q['tables'] or schema != SQL_Q['schema']:
+    if table not in SQL_Q['tables']:
 
         print(f"Table '{table}' is invalid within this scope")
         return
@@ -133,20 +145,20 @@ def CREATE_TABLE_HANDLER(command):
         if re.search(YES, input(f"[WARNING] Table '{table}' already exist.\nDo you wish to override?\n>> ")):
 
             query = '\n'.join(SQL_Q['create-table'][table])
-            mycursor.execute(f'DROP TABLE IF EXISTS `{schema}`.`{table}`')
+            mycursor.execute(f'DROP TABLE IF EXISTS `hospital`.`{table}`')
             mycursor.execute(query)
             print(LOG.format(
-                f"Re-created Table '{table}' in schema '{schema}'"))
+                f"Re-created Table '{table}' in schema 'hospital'"))
 
         else:
 
-            print(f"[LOG] Aborting creation of schema '{schema}'")
+            print(f"[LOG] Aborting creation of schema 'hospital'")
 
     else:
 
         query = '\n'.join(SQL_Q['create-table'][table])
         mycursor.execute(query)
-        print(LOG.format(f"Created Table '{table}' in schema '{schema}'"))
+        print(LOG.format(f"Created Table '{table}' in schema 'hospital'"))
 
 
 def ADD_DOCTOR_HANDLER(command):
@@ -158,16 +170,14 @@ def ADD_DOCTOR_HANDLER(command):
 
     query = SQL_Q['insert-into']['doctor']
     mycursor.execute("SELECT * FROM doctor")
-    doctors = mycursor.fetchall()
+    doctors = [x[0] for x in mycursor.fetchall()]
+    mycursor.execute("SELECT * FROM nurse WHERE doctor_id IS NULL")
+    free_nurses = [x[0] for x in mycursor.fetchall()]
     values = []
 
     for i in range(count):
 
-        mycursor.execute("SELECT * FROM nurse WHERE doctor_id IS NULL")
-
-        free_nurses = mycursor.fetchall()
-
-        if free_nurses == None:
+        if free_nurses == None or free_nurses == []:
 
             print("[WARNING] There are not enough nurses. Aborting operation")
             break
@@ -187,18 +197,19 @@ def ADD_DOCTOR_HANDLER(command):
             '-' + str(randint(1000, 9999))
         address = str(randint(10, 99)) + ' ' + \
             names.get_first_name() + ' Street, Lagos, Nigeria.'
-        specialization = SPECIL_FIELDS[randint(0, len(SPECIL_FIELDS)-1)]
-        dateadded = datetime.datetime.now()
+        specialization = choice(SPECIL_FIELDS)
 
         doctor = (doctor_id, name, email, base64_password, phone,
-                  address, specialization, dateadded)
+                  address, specialization)
 
-        if doctor_id not in [x[0] for x in doctors]:
+        if doctor_id not in doctors:
 
             values.append(doctor)
-            doctors.append(doctor)
+            doctors.append(doctor_id)
+            nurse = choice(free_nurses)
             mycursor.execute(
-                f"UPDATE nurse SET doctor_id = '{doctor_id}' WHERE nurse_id = '{choice(free_nurses)[0]}'")
+                f"UPDATE nurse SET doctor_id = '{doctor_id}' WHERE nurse_id = '{nurse}'")
+            free_nurses.remove(nurse)
             mydb.commit()
 
         else:
@@ -221,7 +232,7 @@ def ADD_RECEPTIONIST_HANDLER(command):
 
     query = SQL_Q['insert-into']['receptionist']
     mycursor.execute("SELECT * FROM receptionist")
-    receptionists = mycursor.fetchall()
+    receptionists = [x[0] for x in mycursor.fetchall()]
     values = []
 
     for i in range(count):
@@ -241,15 +252,14 @@ def ADD_RECEPTIONIST_HANDLER(command):
             '-' + str(randint(1000, 9999))
         address = str(randint(10, 99)) + ' ' + \
             names.get_first_name() + ' Street, Lagos, Nigeria.'
-        dateadded = datetime.datetime.now()
 
         receptionist = (receptionist_id, name, email, base64_password, phone,
-                        address, dateadded)
+                        address)
 
-        if receptionist_id not in [x[0] for x in receptionists]:
+        if receptionist_id not in receptionists:
 
             values.append(receptionist)
-            receptionists.append(receptionist)
+            receptionists.append(receptionist_id)
 
         else:
 
@@ -269,15 +279,29 @@ def ADD_ROOM_HANDLER(command):
     count = int(re.search(r"\d+", kwstripped).group())
 
     query = SQL_Q['insert-into']['room']
+    mycursor.execute("SELECT * FROM nurse WHERE room_id IS NULL")
+    free_nurses = [x[0] for x in mycursor.fetchall()]
+    mycursor.execute("SELECT * FROM room")
+    rooms = [x[0] for x in mycursor.fetchall()]
+    last_room = 0 if rooms == [] or rooms == None else max(rooms)
     values = []
 
     for i in range(count):
 
+        if free_nurses == [] or free_nurses == None:
+            print("[WARNING] There are not enough nurses. Aborting operation")
+            break
+
         type = str(randint(1, 5))
         status = 0
-        dateadded = datetime.datetime.now()
 
-        room = (type, status, dateadded)
+        room = (type, status)
+        nurse = choice(free_nurses)
+        mycursor.execute(
+            f"UPDATE nurse SET room_id = '{last_room + 1}' WHERE nurse_id = '{nurse}'")
+        free_nurses.remove(nurse)
+        last_room += 1
+        mydb.commit()
         values.append(room)
 
     mycursor.executemany(query, values)
@@ -294,8 +318,8 @@ def ADD_NURSE_HANDLER(command):
     count = int(re.search(r"\d+", kwstripped).group())
 
     query = SQL_Q['insert-into']['nurse']
-    mycursor.execute("SELECT * FROM doctor")
-    nurses = mycursor.fetchall()
+    mycursor.execute("SELECT * FROM nurse")
+    nurses = [x[0] for x in mycursor.fetchall()]
     values = []
 
     for i in range(count):
@@ -310,15 +334,14 @@ def ADD_NURSE_HANDLER(command):
             '-' + str(randint(1000, 9999))
         address = str(randint(10, 99)) + ' ' + \
             names.get_first_name() + ' Street, Lagos, Nigeria.'
-        dateadded = datetime.datetime.now()
 
         nurse = (nurse_id, name, email, phone,
-                 address, dateadded)
+                 address)
 
-        if nurse_id not in [x[0] for x in nurses]:
+        if nurse_id not in nurses:
 
             values.append(nurse)
-            nurses.append(nurse)
+            nurses.append(nurse_id)
 
         else:
 
@@ -340,7 +363,7 @@ def ADD_PATIENT_HANDLER(command):
 
     query = SQL_Q['insert-into']['patient']
     mycursor.execute("SELECT * FROM patient")
-    patients = mycursor.fetchall()
+    patients = [x[0] for x in mycursor.fetchall()]
     mycursor.execute("SELECT * FROM receptionist")
     receptionists = mycursor.fetchall()
     values = []
@@ -367,15 +390,14 @@ def ADD_PATIENT_HANDLER(command):
         dob = datetime.date(year, month, day)
         gender = choice(['male', 'female'])
         email = name.replace(' ', '.').lower() + '@email.com'
-        dateadded = datetime.datetime.now()
 
         patient = (patient_id, receptionist_id, name,
-                   dob, gender, phone, email, dateadded)
+                   dob, gender, phone, email)
 
-        if patient_id not in [x[0] for x in patients]:
+        if patient_id not in patients:
 
             values.append(patient)
-            patients.append(patient)
+            patients.append(patient_id)
 
         else:
 
@@ -386,6 +408,63 @@ def ADD_PATIENT_HANDLER(command):
 
     print(LOG.format(
         f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} patient(s) was inserted."))
+
+
+def ADD_APPOINTMENT_HANDLER(command):
+
+    command = re.search(ADD_APPOINTMENT, command).group()
+    keywords = ADD + '|' + 'patien(t|ts)'
+    kwstripped = re.sub(keywords, '', command)
+    count = int(re.search(r"\d+", kwstripped).group())
+
+    query = SQL_Q['insert-into']['appointment']
+
+    mycursor.execute("SELECT * FROM receptionist")
+    receptionists = mycursor.fetchall()
+    mycursor.execute("SELECT * FROM doctor")
+    doctos = mycursor.fetchall()
+    mycursor.execute("SELECT * FROM appointment")
+    patients_with_appointments = [x[3] for x in mycursor.fetchall()]
+    mycursor.execute("SELECT * FROM patient")
+    patients_without_appointments = [x[0] for x in mycursor.fetchall(
+    ) if x[0] not in patients_with_appointments]
+
+    values = []
+
+    if receptionists == [] or receptionists == None or doctos == [] or doctos == None:
+
+        raise Exception(
+            "[WARNING] There are missing personnel (i.e. Receptionist or Doctor). Aborting operation")
+
+    for i in range(count):
+
+        if patients_without_appointments == [] or patients_without_appointments == None:
+            print("[WARNING] There are not enough patients. Aborting operation")
+            break
+
+        patient_id = choice(patients_without_appointments)
+        doctor_id = choice(doctos)[0]
+        receptionist_id = choice(receptionists)[0]
+
+        today = datetime.datetime.now()
+        year = choice([today.year, today.year +
+                       1 if today.month > 1 else today.year])
+        month = randint(today.month if year == today.year else 1,
+                        12 if year == today.year else today.month)
+        day = randint(1, 29 if month == 2 else 30 if month in [
+                      9, 4, 6, 11] else 31)
+        app_date = datetime.date(year, month, day)
+
+        appointment = (receptionist_id, doctor_id, patient_id, app_date)
+
+        values.append(appointment)
+        patients_without_appointments.remove(patient_id)
+
+    mycursor.executemany(query, values)
+    mydb.commit()
+
+    print(LOG.format(
+        f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} appointment(s) was inserted."))
 
 
 if __name__ == "__main__":
@@ -440,9 +519,19 @@ if __name__ == "__main__":
                 ADD_PATIENT_HANDLER(command)
                 continue
 
-            else:
+            elif re.search(ADD_APPOINTMENT, command):
 
+                ADD_APPOINTMENT_HANDLER(command)
                 continue
+
+            elif re.search(RESET_TABLE, command):
+
+                RESET_TABLES()
+                continue
+
+            elif re.search(r'((E|e)nd|END)|((S|s)top|STOP)', command):
+
+                break
 
         except Exception as e:
 
