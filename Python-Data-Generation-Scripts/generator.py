@@ -41,6 +41,8 @@ ADD_ROOM = f"{ADD} \d+ roo(m|ms)"
 ADD_NURSE = f"{ADD} \d+ nurs(e|es)"
 ADD_PATIENT = f"{ADD} \d+ patien(t|ts)"
 ADD_APPOINTMENT = f"{ADD} \d+ appointmen(t|ts)"
+ADD_ADMISSION = f"{ADD} \d+ admissio(n|ns)"
+STATUS = r"(S|s)tatus"
 RESET_TABLE = r"(R|r)eset tabl(e|es)"
 YES = r"(y|Y|yes|Yes|YES)"
 NO = r"(n|N|no|No|NO)"
@@ -92,6 +94,16 @@ def RESET_TABLES():
         mycursor.execute(query)
         print(LOG.format(
             f"Re-created Table '{table}' in schema 'hospital'"))
+
+
+def SHOW_STATUS():
+
+    for table in SQL_Q['tables']:
+        query = f"SELECT * FROM {table}"
+        mycursor.execute(query)
+        result = mycursor.fetchall()
+        print(LOG.format(
+            f"Table '{table}' has {len(result)} records."))
 
 
 def CREATE_SCHEMA_HANDLER(command):
@@ -163,10 +175,7 @@ def CREATE_TABLE_HANDLER(command):
 
 def ADD_DOCTOR_HANDLER(command):
 
-    command = re.search(ADD_DOCTOR, command).group()
-    keywords = ADD + '|' + 'docto(r|rs)'
-    kwstripped = re.sub(keywords, '', command)
-    count = int(re.search(r"\d+", kwstripped).group())
+    count = int(re.search(r"\d+", command).group())
 
     query = SQL_Q['insert-into']['doctor']
     mycursor.execute("SELECT * FROM doctor")
@@ -225,10 +234,7 @@ def ADD_DOCTOR_HANDLER(command):
 
 def ADD_RECEPTIONIST_HANDLER(command):
 
-    command = re.search(ADD_RECEPTIONIST, command).group()
-    keywords = ADD + '|' + 'receptionis(t|ts)'
-    kwstripped = re.sub(keywords, '', command)
-    count = int(re.search(r"\d+", kwstripped).group())
+    count = int(re.search(r"\d+", command).group())
 
     query = SQL_Q['insert-into']['receptionist']
     mycursor.execute("SELECT * FROM receptionist")
@@ -273,10 +279,7 @@ def ADD_RECEPTIONIST_HANDLER(command):
 
 def ADD_ROOM_HANDLER(command):
 
-    command = re.search(ADD_ROOM, command).group()
-    keywords = ADD + '|' + 'roo(m|ms)'
-    kwstripped = re.sub(keywords, '', command)
-    count = int(re.search(r"\d+", kwstripped).group())
+    count = int(re.search(r"\d+", command).group())
 
     query = SQL_Q['insert-into']['room']
     mycursor.execute("SELECT * FROM nurse WHERE room_id IS NULL")
@@ -312,10 +315,7 @@ def ADD_ROOM_HANDLER(command):
 
 def ADD_NURSE_HANDLER(command):
 
-    command = re.search(ADD_NURSE, command).group()
-    keywords = ADD + '|' + 'nurs(e|es)'
-    kwstripped = re.sub(keywords, '', command)
-    count = int(re.search(r"\d+", kwstripped).group())
+    count = int(re.search(r"\d+", command).group())
 
     query = SQL_Q['insert-into']['nurse']
     mycursor.execute("SELECT * FROM nurse")
@@ -356,10 +356,7 @@ def ADD_NURSE_HANDLER(command):
 
 def ADD_PATIENT_HANDLER(command):
 
-    command = re.search(ADD_PATIENT, command).group()
-    keywords = ADD + '|' + 'patien(t|ts)'
-    kwstripped = re.sub(keywords, '', command)
-    count = int(re.search(r"\d+", kwstripped).group())
+    count = int(re.search(r"\d+", command).group())
 
     query = SQL_Q['insert-into']['patient']
     mycursor.execute("SELECT * FROM patient")
@@ -412,10 +409,7 @@ def ADD_PATIENT_HANDLER(command):
 
 def ADD_APPOINTMENT_HANDLER(command):
 
-    command = re.search(ADD_APPOINTMENT, command).group()
-    keywords = ADD + '|' + 'patien(t|ts)'
-    kwstripped = re.sub(keywords, '', command)
-    count = int(re.search(r"\d+", kwstripped).group())
+    count = int(re.search(r"\d+", command).group())
 
     query = SQL_Q['insert-into']['appointment']
 
@@ -465,6 +459,46 @@ def ADD_APPOINTMENT_HANDLER(command):
 
     print(LOG.format(
         f"{mycursor.rowcount if mycursor.rowcount > 0 else 0} appointment(s) was inserted."))
+
+
+def ADD_ADMISSION_HANDLER(command):
+
+    #"INSERT INTO `hospital`.`admission` (patient_id, room_id) VALUES (%s, %s)"
+    count = int(re.search(r"\d+", command).group())
+
+    query = SQL_Q['insert-into']['admission']
+    mycursor.execute("SELECT * FROM room WHERE status < type")
+    available_rooms = [x for x in mycursor.fetchall() if x[2] < x[1]]
+    mycursor.execute("SELECT * FROM admission")
+    unavailable_patients = [x[1] for x in mycursor.fetchall()]
+    mycursor.execute("SELECT * FROM patient")
+    available_patients = [
+        x[0] for x in mycursor.fetchall() if x[0] not in unavailable_patients]
+    values = []
+
+    for i in range(count):
+
+        if available_patients == [] or available_patients == None or available_rooms == [] or available_rooms == None:
+            print(
+                "[WARNING] There are not enough patients or rooms. Aborting operation")
+            break
+
+        patient = choice(available_patients)
+        index = randint(0, len(available_rooms)-1)
+        room = available_rooms[index][0]
+        available_rooms[index][2] += 1
+        mycursor.execute(
+            f"UPDATE room SET status = '{available_rooms[index][2]}' WHERE room_id = '{room}'")
+        available_rooms = [x for x in available_rooms if x[2] < x[1]]
+        mydb.commit()
+
+        admission = (patient, room)
+        values.append(admission)
+
+    mycursor.executemany(query, values)
+    mydb.commit()
+
+    print(LOG.format(f"{mycursor.rowcount} addmission(s) was inserted."))
 
 
 if __name__ == "__main__":
@@ -524,9 +558,19 @@ if __name__ == "__main__":
                 ADD_APPOINTMENT_HANDLER(command)
                 continue
 
+            elif re.search(ADD_ADMISSION, command):
+
+                ADD_ADMISSION_HANDLER(command)
+                continue
+
             elif re.search(RESET_TABLE, command):
 
                 RESET_TABLES()
+                continue
+
+            elif re.search(STATUS, command):
+
+                SHOW_STATUS()
                 continue
 
             elif re.search(r'((E|e)nd|END)|((S|s)top|STOP)', command):

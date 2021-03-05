@@ -67,6 +67,16 @@ $ python generator.py
 ```
 >> Add 50 appointments
 ```
+### Add admission
+> <b>Note:</b> The number of `admissions` can not exceed the number of `patients` or the total number of bedspaces.
+```
+>> Add 15 admissions
+```
+### Show status of all tables
+> <b>Note:</b> This show the number of records in each table in the schema
+```
+>> Status
+```
 ### Reset all tables
 > <b>Note:</b> This will clear all data in all the tables.<br>It is reccomended you do this whenever you want to run a new simulation.
 ```
