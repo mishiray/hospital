@@ -7,6 +7,7 @@ import names
 from random import (randint, choice)
 import datetime
 import base64
+import pprint
 
 LOG = "[LOG] {}"
 SPECIL_FIELDS = [
@@ -467,8 +468,10 @@ def ADD_ADMISSION_HANDLER(command):
     count = int(re.search(r"\d+", command).group())
 
     query = SQL_Q['insert-into']['admission']
-    mycursor.execute("SELECT * FROM room WHERE status < type")
-    available_rooms = [x for x in mycursor.fetchall() if x[2] < x[1]]
+    mycursor.execute("SELECT * FROM room")
+    rooms = mycursor.fetchall()
+    pprint.pprint(rooms)
+    available_rooms = [list(x) for x in rooms if x[2] < x[1]]
     mycursor.execute("SELECT * FROM admission")
     unavailable_patients = [x[1] for x in mycursor.fetchall()]
     mycursor.execute("SELECT * FROM patient")
@@ -486,9 +489,10 @@ def ADD_ADMISSION_HANDLER(command):
         patient = choice(available_patients)
         index = randint(0, len(available_rooms)-1)
         room = available_rooms[index][0]
-        available_rooms[index][2] += 1
         mycursor.execute(
             f"UPDATE room SET status = '{available_rooms[index][2]}' WHERE room_id = '{room}'")
+
+        available_rooms[index][2] += 1
         available_rooms = [x for x in available_rooms if x[2] < x[1]]
         mydb.commit()
 
