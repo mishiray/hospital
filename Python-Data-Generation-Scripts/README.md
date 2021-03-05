@@ -8,6 +8,7 @@ This python script will automatically generate data for the hospital database.
 - Names - `names`
 
 ## Install requirements
+> <b>Note:</b> Make sure you run the bash command in the same directory as `requirements.txt`<br>If you aren't in the directory, run: `cd hospital/Python-Data-Generation-Scripts/`
 ```bash
 $ pip install -r requirements.txt
 ```
@@ -33,13 +34,13 @@ $ python generator.py
 >> Create schema hospital
 ```
 ### Create table
-**eg**: TABLE `patient` in SCHEMA `hospital`
+**eg**: TABLE `patient`
 > <b>Note:</b> The `create table` will overwrite the table if it already exists. <br>Useful for reseting the table
 ```
->> Create table patient in schema hospital
+>> Create table patient
 ```
 ### Add doctors
-> <b>Note:</b> The number of `doctors` can not exceed the number of `nurses` 
+> <b>Note:</b> The number of `doctors` can not exceed the number of `nurses`
 ```
 >> Add 1 doctor
 ```
@@ -48,6 +49,7 @@ $ python generator.py
 >> Add 15 receptionists
 ```
 ### Add room
+> <b>Note:</b> The number of `rooms` can not exceed the number of `nurses`
 ```
 >> Add 12 rooms
 ```
@@ -59,4 +61,18 @@ $ python generator.py
 > <b>Note:</b> There must be at least one `receptionist` before adding a `patient`.
 ```
 >> Add 77 patients
+```
+### Add appointment
+> <b>Note:</b> The number of `appointments` can not exceed the number of `patients`.
+```
+>> Add 50 appointments
+```
+### Reset all tables
+> <b>Note:</b> This will clear all data in all the tables.<br>It is reccomended you do this whenever you want to run a new simulation.
+```
+>> Reset tables
+```
+### End the program
+```
+>> End
 ```
