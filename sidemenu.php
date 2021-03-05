@@ -4,10 +4,29 @@
                 <ul class="nav" id="main-menu">
 
                     <li>
-                        <a class="active-menu waves-effect waves-dark" href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+                        <a class="active-menu waves-effect waves-dark" href="default.php"><i class="fa fa-dashboard"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="ui-elements.html" class="waves-effect waves-dark"><i class="fa fa-desktop"></i> UI Elements</a>
+                        <a href="#" class="waves-effect waves-dark"><i class="fa fa-plus"></i> Nurses <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="nurses.php">All Nurses</a>
+                            </li>
+                            <li>
+                                <a href="mynurses.php">My Nurses</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="waves-effect waves-dark"><i class="fa fa-plus"></i> Appointments <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="today_appointments.php">Today</a>
+                            </li>
+                            <li>
+                                <a href="appointments.php">All time</a>
+                            </li>
+                        </ul>
                     </li>
 					<li>
                         <a href="chart.html" class="waves-effect waves-dark"><i class="fa fa-bar-chart-o"></i> Charts</a>
