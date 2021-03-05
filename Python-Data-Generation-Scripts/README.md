@@ -8,6 +8,7 @@ This python script will automatically generate data for the hospital database.
 - Names - `names`
 
 ## Install requirements
+> <b>Note:</b> Make sure you run the bash command in the same directory as `requirements.txt`<br>If you aren't in the directory, run: `cd hospital/Python-Data-Generation-Scripts/`
 ```bash
 $ pip install -r requirements.txt
 ```
