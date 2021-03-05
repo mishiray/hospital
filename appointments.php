@@ -1,12 +1,25 @@
 ﻿<?php
     require_once 'base.php';
     //nurses on duty
-    $sql = "SELECT * FROM `appointments` WHERE `doctor_id` = '$userinfo->doctor_id' ORDER BY `dateadded` DESC ";
+    $sql = "SELECT * FROM `appointment` WHERE `doctor_id` = '$userinfo->doctor_id' ORDER BY `app_date` ASC ";
     $result = mysqli_query($conn, $sql);
     if(!empty($result)){
         $appointments = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+    if(!empty($appointments)){
+        echo 'ok';
+        foreach($appointments as $value){
+            if(!empty($value->receptionist_id)){
+                echo 'ok';
+                $sql = "SELECT `name` FROM `receptionist` WHERE `receptionist_id` = '$value->receptionist_id'";
+                $result = mysqli_query($conn, $sql);
+                $doctor = mysqli_fetch_object($result);
+                print_r($doctor);
+            }
 
+        }
+    }
+    //print_r($appointments);
     if($_SERVER['REQUEST_METHOD'] == 'POST' and $_POST['triggers'] == 'assign'){
         $sql = "UPDATE `nurse` SET `doctor_id` = '$userinfo->doctor_id' WHERE `nurse_id` = '$_POST[nurse_id]' ";
         echo $sql;
@@ -75,8 +88,8 @@
                                         ?>       
                                             <tr class='odd gradeX'>
                                                 <td><?php echo $app['id'] ?></td>
-                                                <td><?php echo $app['receptionist'] ?></td>
-                                                <td><?php echo ucwords($app['patient']) ?></td>
+                                                <td><?php echo $app['receptionist_id'] ?></td>
+                                                <td><?php //echo ucwords($app['patient']) ?></td>
                                                 <td><?php echo $app['report'] ?></td>
                                                 <td><?php echo $app['app_date'] ?></td>
                                                 <td><?php echo $app['next_app_date'] ?></td>
