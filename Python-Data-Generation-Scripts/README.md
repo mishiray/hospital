@@ -72,3 +72,7 @@ $ python generator.py
 ```
 >> Reset tables
 ```
+### End the program
+```
+>> End
+```
