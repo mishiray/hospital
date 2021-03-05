@@ -135,7 +135,7 @@ border-color: #075CB3;
 /*----------------------------------------------
    DASHBOARD STYLES    
 ------------------------------------------------*/
-.page-header {padding-bottom: 0;margin: 0;border-bottom: 1px solid transparent;text-align: left;background-color: #fff;padding: 32px 22px 10px 28px;color: #0866C6;}
+.page-header {padding-bottom: 0;margin: 0;border-bottom: 1px solid transparent;background-color: #fff;padding: 32px 22px 10px 28px;color: #0866C6;}
 .panel-left{  
 width: 100px;
 height: 100px;background: #0866C6;/* border: 2px solid #4590DA; */
