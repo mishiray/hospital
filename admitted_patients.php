@@ -1,7 +1,7 @@
 ﻿<?php
     require_once 'base.php';
     //nurses on duty
-    $sql = "SELECT * FROM `appointment` WHERE `doctor_id` = '$userinfo->doctor_id' ORDER BY `app_date` ASC ";
+    $sql = "SELECT * FROM `admissions` WHERE `doctor_id` = '$userinfo->doctor_id' ORDER BY `app_date` ASC ";
     $result = mysqli_query($conn, $sql);
     $appointments = [];
     if(!empty($result)){
