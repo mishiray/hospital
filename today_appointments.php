@@ -1,7 +1,8 @@
 ﻿<?php
     require_once 'base.php';
     //nurses on duty
-    $sql = "SELECT * FROM `appointment` WHERE `doctor_id` = '$userinfo->doctor_id' ORDER BY `app_date` ASC ";
+    $today = date("Y/m/d"); 
+    $sql = "SELECT * FROM `appointment` WHERE `doctor_id` = '$userinfo->doctor_id' AND ( DATE_FORMAT(app_date, '%Y/%m/%d') = '$today')  ORDER BY `app_date` ASC ";
     $result = mysqli_query($conn, $sql);
     $appointments = [];
     if(!empty($result)){
@@ -67,7 +68,7 @@
                         <!-- Advanced Tables -->
                         <div class="card">
                             <div class="card-action">
-                                My Appointments
+                                My Appointments For Today
                             </div>
                         
                             <?php 
@@ -104,7 +105,7 @@
                                                 <td><?php echo $app->next_app_date ?></td>
                                                 <td class="center">
                                                     <?php 
-                                                        
+
                                                         echo "<a href='update_appointments.php?id=$app->id' class='btn btn-info'>Update Info<a>";
                                                         
                                                     ?>

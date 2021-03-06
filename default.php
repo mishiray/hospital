@@ -78,7 +78,7 @@
                         </div>
                         <div class="col-lg-4">
                         <h1 class="page-header text-center">
-                            Nurses <a class="btn-floating btn-primary"><i class="material-icons">add</i></a>
+                            Nurses <a href="nurses.php" class="btn-floating btn-primary"><i class="material-icons">add</i></a>
                         <p><small class="">On duty</small></p>
                         </h1>
                             <div class="row ">
