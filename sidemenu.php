@@ -15,6 +15,9 @@
                             <li>
                                 <a href="mynurses.php">My Nurses</a>
                             </li>
+                            <li>
+                                <a href="add_nurse.php">Add New Nurse</a>
+                            </li>
                         </ul>
                     </li>
                     <li>

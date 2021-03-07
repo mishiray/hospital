@@ -1,7 +1,7 @@
 ﻿<?php
     require_once 'base.php';
     //nurses on duty
-    $sql = "SELECT n.name as name, n.doctor_id as doctor_id, n.nurse_id as nurse_id, d.name as doc, n.email as email, n.address as address, n.phone as phone FROM `nurse` as n LEFT JOIN `doctor` as d on n.doctor_id = d.doctor_id ORDER BY d.name ";
+    $sql = "SELECT n.name as name, n.doctor_id as doctor_id, n.nurse_id as nurse_id, d.name as doc, n.email as email, n.address as address, n.phone as phone, n.dateadded as dateadded FROM `nurse` as n LEFT JOIN `doctor` as d on n.doctor_id = d.doctor_id ORDER BY n.dateadded DESC ";
     $result = mysqli_query($conn, $sql);
     if(!empty($result)){
         $nurses = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -9,9 +9,20 @@
 
     if($_SERVER['REQUEST_METHOD'] == 'POST' and $_POST['triggers'] == 'assign'){
         $sql = "UPDATE `nurse` SET `doctor_id` = '$userinfo->doctor_id' WHERE `nurse_id` = '$_POST[nurse_id]' ";
-        echo $sql;
+        //echo $sql;
         if( mysqli_query($conn, $sql)){
             $fail = "Nurse assigned!";
+        }else{
+            
+            $fail = "Try again";
+        }
+    }
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST' and $_POST['triggers'] == 'delete'){
+        $sql = "DELETE FROM `nurse` WHERE `nurse_id` = '$_POST[nurse_id]' ";
+        //echo $sql;
+        if( mysqli_query($conn, $sql)){
+            $fail = "Nurse data has been deleted!";
         }else{
             
             $fail = "Try again";
@@ -59,27 +70,32 @@
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                         <thead>
                                             <tr>
+                                                <th>SN</th>
                                                 <th>ID</th>
                                                 <th>DOC ASSIGNED</th>
                                                 <th>NAME</th>
                                                 <th>EMAIL</th>
                                                 <th>PHONE</th>
                                                 <th>ADDRESS</th>
+                                                <th>DATE ADDED</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php 
                                             if(!empty($nurses)){
+                                                $count = 1;
                                                 foreach($nurses as $nurse){
                                         ?>       
                                             <tr class='odd gradeX'>
+                                                <td><?php echo $count++ ?></td>
                                                 <td><?php echo $nurse['nurse_id'] ?></td>
                                                 <td><?php echo $nurse['doc'] ?></td>
                                                 <td><?php echo ucwords($nurse['name']) ?></td>
                                                 <td><?php echo $nurse['email'] ?></td>
                                                 <td><?php echo $nurse['phone'] ?></td>
                                                 <td><?php echo $nurse['address'] ?></td>
+                                                <td><?php echo $nurse['dateadded'] ?></td>
                                                 <td class="center">
                                                     <?php 
 
@@ -93,7 +109,12 @@
                                                         }else{
                                                             echo '<a class="btn waves-effect waves-light disabled">Unavailable<a>';
                                                         }
-
+                                                        echo "
+                                                        <form action='nurses.php' method='post'>
+                                                            <input type='hidden' name='nurse_id' value='$nurse[nurse_id]' />
+                                                            <button type='submit' style='margin-top: 5px;' name='triggers' value='delete' class='waves-effect waves-light btn btn-danger'>Delete</button>
+                                                        </form>
+                                                        ";
                                                     ?>
                                                 </td>
                                             </tr>
