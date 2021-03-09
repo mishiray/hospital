@@ -59,8 +59,8 @@
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                         <thead>
                                             <tr>
+                                                <th>SN</th>
                                                 <th>ID</th>
-                                                <th>DOC ASSIGNED</th>
                                                 <th>NAME</th>
                                                 <th>EMAIL</th>
                                                 <th>PHONE</th>
@@ -71,11 +71,12 @@
                                         <tbody>
                                         <?php 
                                             if(!empty($nurses)){
+                                                $count = 1;
                                                 foreach($nurses as $nurse){
                                         ?>       
                                             <tr class='odd gradeX'>
+                                                <td><?php echo $count++ ?></td>
                                                 <td><?php echo $nurse['nurse_id'] ?></td>
-                                                <td><?php echo $nurse['doc'] ?></td>
                                                 <td><?php echo ucwords($nurse['name']) ?></td>
                                                 <td><?php echo $nurse['email'] ?></td>
                                                 <td><?php echo $nurse['phone'] ?></td>
@@ -87,7 +88,7 @@
                                                             echo "
                                                             <form action='mynurses.php' method='post'>
                                                                 <input type='hidden' name='nurse_id' value='$nurse[nurse_id]' />
-                                                                <button type='submit' name='triggers' value='unassign' class='btn waves-effect waves-light  btn-success btn-sm'>Unssign</button>
+                                                                <button type='submit' name='triggers' value='unassign' class='btn waves-effect waves-light  btn-success btn-sm'>UnAssign</button>
                                                             </form>
                                                             ";
                                                         }

@@ -80,7 +80,7 @@
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>SN</th>
                                                 <th>RECORDED BY</th>
                                                 <th>PATIENT</th>
                                                 <th>REPORT</th>

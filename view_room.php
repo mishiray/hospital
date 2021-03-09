@@ -1,7 +1,9 @@
 ﻿<?php
     require_once 'base.php';
-    
-    $sql = "SELECT * FROM `admission` ORDER BY `admitted_date` DESC ";
+
+
+    $id = (!empty($_GET["id"])) ? $_GET["id"] : '';
+    $sql = "SELECT * FROM `admission` WHERE `room_id` = '$id' ";
     $result = mysqli_query($conn, $sql);
     $admissions = [];
     if(!empty($result)){
@@ -20,7 +22,6 @@
             $value->out = strtotime($value->discharge_date) < strtotime(date("Y-m-d H:i:s")) ? true : false ;
         }
     }
-
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"> 
@@ -49,7 +50,7 @@
                         <!-- Advanced Tables -->
                         <div class="card">
                             <div class="card-action">
-                                Admissions
+                                ROOMING
                             </div>
                         
                             <?php 
@@ -64,7 +65,6 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>PATIENT</th>
-                                                <th>ROOM NUM</th>
                                                 <th>REPORT</th>
                                                 <th>ADMITTED DATE</th>
                                                 <th>DISCHARGE DATE</th>
@@ -80,8 +80,7 @@
                                         ?>       
                                             <tr class='odd gradeX'>
                                                 <td><?php echo $count++ ?></td>
-                                                <td><?php echo $app->patient ?></td>
-                                                <td><?php echo $app->room_id ?></td>
+                                                <td><?php echo $app->patient ?></td>    
                                                 <td><?php echo $app->report ?></td>
                                                 <td><?php echo $app->admitted_date ?></td>
                                                 <td><?php echo $app->discharge_date ?></td>

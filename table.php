@@ -32,7 +32,7 @@
                 </button>
                 <a class="navbar-brand waves-effect waves-dark" href="index.html"><i class="large material-icons">track_changes</i> <strong>target</strong></a>
 				
-		<div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
+		    <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
             </div>
 
             <ul class="nav navbar-top-links navbar-right"> 
@@ -52,7 +52,7 @@
             </li>
             </ul>
             <ul id="dropdown2" class="dropdown-content w250">
-            <li>
+                <li>
                                         <a href="#">
                                             <div>
                                                 <i class="fa fa-comment fa-fw"></i> New Comment
@@ -105,7 +105,7 @@
                                     </li>
             </ul>
             <ul id="dropdown3" class="dropdown-content dropdown-tasks w250">
-            <li>
+                <li>
                     <a href="#">
                         <div>
                             <p>
@@ -172,7 +172,7 @@
                 <li>
             </ul>   
             <ul id="dropdown4" class="dropdown-content dropdown-tasks w250 taskList">
-            <li>
+                <li>
                                             <div>
                                                 <strong>John Doe</strong>
                                                 <span class="pull-right text-muted">
