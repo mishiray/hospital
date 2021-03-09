@@ -15,3 +15,4 @@ require_once 'php/config.php';
   //doc name
   $userinfo = $_SESSION["userinfo"];
   $name = ucwords($userinfo->name);
+

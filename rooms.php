@@ -1,23 +1,20 @@
 ﻿<?php
     require_once 'base.php';
-    
-    $sql = "SELECT * FROM `admission` ORDER BY `admitted_date` DESC ";
+    //nurses on duty
+    $sql = "SELECT* FROM `room` ORDER BY `room_id`";
     $result = mysqli_query($conn, $sql);
-    $admissions = [];
     if(!empty($result)){
-        while ($entry = mysqli_fetch_object($result)) {
-           $admissions[] = $entry;
-        }
+        $rooms = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
-    if(!empty($admissions)){
-        foreach($admissions as $value){
-            if(!empty($value->patient_id)){
-                $sql = "SELECT `name` FROM `patient` WHERE `patient_id` = '$value->patient_id'";
-                $result = mysqli_query($conn, $sql);
-                $doctor = mysqli_fetch_object($result);
-                $value->patient = $doctor->name;
-            }
-            $value->out = strtotime($value->discharge_date) < strtotime(date("Y-m-d H:i:s")) ? true : false ;
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST' and $_POST['triggers'] == 'delete'){
+        $sql = "DELETE FROM `nurse` WHERE `nurse_id` = '$_POST[nurse_id]' ";
+        //echo $sql;
+        if( mysqli_query($conn, $sql)){
+            $fail = "Nurse data has been deleted!";
+        }else{
+            
+            $fail = "Try again";
         }
     }
 
@@ -49,7 +46,7 @@
                         <!-- Advanced Tables -->
                         <div class="card">
                             <div class="card-action">
-                                Admissions
+                                ROOMING
                             </div>
                         
                             <?php 
@@ -62,34 +59,30 @@
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>PATIENT</th>
+                                                <th>SN</th>
                                                 <th>ROOM NUM</th>
-                                                <th>REPORT</th>
-                                                <th>ADMITTED DATE</th>
-                                                <th>DISCHARGE DATE</th>
-                                                <th>STATUS</th>
+                                                <th>SIZE</th>
+                                                <th>PATIENTS AVAILABLE</th>
+                                                <th>DATE ADDED</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php 
-                                            if(!empty($admissions)){
+                                            if(!empty($rooms)){
                                                 $count = 1;
-                                                foreach($admissions as $app){
+                                                foreach($rooms as $room){
                                         ?>       
                                             <tr class='odd gradeX'>
                                                 <td><?php echo $count++ ?></td>
-                                                <td><?php echo $app->patient ?></td>
-                                                <td><?php echo $app->room_id ?></td>
-                                                <td><?php echo $app->report ?></td>
-                                                <td><?php echo $app->admitted_date ?></td>
-                                                <td><?php echo $app->discharge_date ?></td>
-                                                <td><?php echo ($app->out) ? "Discharged" : "In Admission" ?></td>
+                                                <td><?php echo $room['room_id'] ?></td>
+                                                <td><?php echo $room['type'] ?></td>
+                                                <td><?php echo $room['status'] ?></td>
+                                                <td><?php echo $room['dateadded'] ?></td>
                                                 <td class="center">
                                                     <?php 
-                                                        
-                                                        echo "<a href='update_admission.php?id=$app->id' class='btn btn-info'>Update Info<a>";
+                                                        echo "<a href='update_rooms.php?id=$room[room_id]' style='margin-right:4px;' class='btn btn-info'>Update Info<a>"; 
+                                                        echo "<a href='view_room.php?id=$room[room_id]' class='btn btn-success'>View Room<a>";
                                                         
                                                     ?>
                                                 </td>
@@ -98,7 +91,7 @@
                                         <?php
                                                 }
                                             }else{
-                                                echo "<p style='margin-left:30px;margin-right:30px;' class='text-light bg-danger text-center'>No admissions</p>";
+                                                echo "<p style='margin-left:30px;margin-right:30px;' class='text-light bg-danger text-center'>No rooms found</p>";
                                             }
                                         ?>
                                         </tbody>

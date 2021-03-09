@@ -20,6 +20,21 @@
     $total_patients = mysqli_query($conn, "SELECT * FROM `patient` WHERE `status` = 1");
     $total_patients = mysqli_num_rows($total_patients);
     
+    //appointments ratio
+    $sql = "SELECT COUNT(*) as alltime, COUNT(case doctor_id when '$userinfo->doctor_id' then 1 else null end) as mine FROM `appointment`";
+    $result = mysqli_query($conn, $sql);
+    $appointments = [];
+    if(!empty($result)){
+        while ($entry = mysqli_fetch_object($result)) {
+           $appointments = $entry;
+        }
+
+        $mine = $appointments->mine;
+        $alltime = $appointments->alltime;
+
+        $per = ($mine/$alltime) * 100;
+        $per = number_format($per,0);
+    }
 
 ?>
 <!DOCTYPE html>
@@ -67,8 +82,8 @@
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                     <div class="card vertical cardIcon waves-effect waves-dark">
                                         <div class="card-stacked text-primary white">
-                                        <h4>Profit</h4> 
-                                        <div class="easypiechart" id="easypiechart-blue" data-percent="82" ><span class="percent">82%</span>
+                                        <h4>Appointments</h4> 
+                                        <div class="easypiechart" id="easypiechart-blue" data-percent="<?php echo $per; ?>" ><span class="percent"><?php echo $per; ?>%</span>
                                         </div> 
                                 
                                         </div>

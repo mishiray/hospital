@@ -132,7 +132,6 @@
         </div>
         <!--End main shi-->
         <!-- /. PAGE WRAPPER  -->
-    </div>
     <!-- /. WRAPPER  -->
     <!-- JS Scripts-->
     <!-- jQuery Js -->
